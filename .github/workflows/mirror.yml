@@ -28,7 +28,8 @@ jobs:
           git add .
           git commit -m "Automated mirror (excluding oblig files)" || echo "Nothing to commit"
           git branch -M main
-          git remote add mirror https://github.com/ProtoSparky/NTNU-Code-Public.git
+          git remote add mirror https://x-access-token:${{ secrets.MIRROR_TOKEN }}@github.com/ProtoSparky/NTNU-Code-Public.git
           git push --force mirror main
+
         env:
           GITHUB_TOKEN: ${{ secrets.MIRROR_TOKEN }}
