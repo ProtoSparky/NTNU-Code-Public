@@ -11,6 +11,10 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+      - name: Remove workflow files
+        run: |
+          # Remove the entire workflows directory
+          rm -rf .github/workflows
 
       - name: Push oblig files to public
         env:
