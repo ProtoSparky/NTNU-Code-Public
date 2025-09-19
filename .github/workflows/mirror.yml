@@ -16,8 +16,12 @@ jobs:
 
       - name: Remove oblig files
         run: |
+          # Remove files containing 'oblig' in their name
           find . -type f -name '*oblig*' -delete
+          # Remove empty directories after deleting oblig files
           find . -type d -empty -delete
+          # Remove the entire workflows directory
+          rm -rf .github/workflows
 
       - name: Push to public mirror
         env:
