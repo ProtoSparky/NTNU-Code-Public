@@ -18,6 +18,7 @@ const int STRLEN = 100; ///< Maks tekstlengde.
  * @brief Startpunktet for programmet.
  * @details Henter og presenterer informasjon for frisbeegolf baner
  * @return returnerer int 0 etter den var kjørt
+ * @note Bruk av goto var for å unngå ekstremt mange nested while loops.
  */
 int main(){
     char baneBeskrivelse[MAXBANER][STRLEN]; // Beskrivelse av banene.
@@ -88,7 +89,8 @@ int main(){
                 scanf("%d", &tempPar);
                 getchar(); 
                 if(tempPar < 2 || tempPar > 8){
-                    printf("%i er ikke godkjent. Godkjente tall er (2-8) \n");
+                    printf("%i er ikke godkjent. Godkjente tall er (2-8) \n",
+                    tempPar);                    
                     goto par_feil;
                 }
                 //lagrer input data hvis inout er mellom 2 og 8
@@ -106,7 +108,7 @@ int main(){
                     baneOB[antallBaner] = false;
                 }
                 else{
-                    printf("%c er verken J eller N \n");
+                    printf("input er verken J eller N \n");
                     goto ob_feil; 
                 }
 
