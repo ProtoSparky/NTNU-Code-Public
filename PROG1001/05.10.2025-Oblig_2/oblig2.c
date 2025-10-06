@@ -27,19 +27,22 @@ int main(){
 
     ask_for_input:
 
-    char userInput ;
+    char userInput[100];
     printf("Menyvalg:");
     printf("\n    L - Legge til bane");
     printf("\n    S - Se alle baner");
     printf("\n    Q - Asvlutt");
     printf("\nValg:");
 
-    scanf("%c", &userInput);
-    getchar();
-    switch(toupper(userInput)){
+    //scanf(" %c", &userInput);
+    //getchar();
+    fgets(userInput, sizeof(userInput), stdin);
+    char userChoise = toupper(userInput[0]);
+    switch(userChoise){
         case 76: //L            
             if(antallBaner >= MAXBANER){
                 printf("Du har nådd maks baner, og kan ikke legge til flere.");
+                goto ask_for_input;
             }
             else{
                 bane_lengde_feil:
@@ -47,7 +50,7 @@ int main(){
                 int tempBaneLengde;
                 int tempPar;
                 char tempOB;
-                char tempBeskrivelse;
+                char tempBeskrivelse[STRLEN];
 
                 scanf("%d", &tempBaneLengde); 
                 getchar();
@@ -60,7 +63,7 @@ int main(){
                     goto bane_lengde_feil; 
                 }
                 
-                baneLengde[antallBaner +1] = tempBaneLengde; //lagrer data
+                baneLengde[antallBaner] = tempBaneLengde; //lagrer data
 
                 par_feil:
                 printf("Par på banen (2-8): ");
@@ -70,39 +73,59 @@ int main(){
                     printf("%i er ikke godkjent. Godkjente tall er (2-8) \n");
                     goto par_feil;
                 }
-                banePar[antallBaner + 1] = tempPar; //lagrer data
+                banePar[antallBaner] = tempPar; //lagrer data
 
                 ob_feil:
                 printf("Har banen OB (J/N): ");
                 scanf("%c", &tempOB);
                 getchar();
-                if(toupper(tempOB)!= 'J' && toupper(tempOB)!= 'N'){
-                    printf("%c er verken J eller N \n");
-                    goto ob_feil;
+                if(toupper(tempOB) == 'J'){
+                    baneOB[antallBaner] = true;
                 }
-                baneOB[antallBaner + 1] = tempOB; 
+                else if(toupper(tempOB) == 'N'){
+                    baneOB[antallBaner] = false;
+                }
+                else{
+                    printf("%c er verken J eller N \n");
+                    goto ob_feil; 
+                }
 
                 beskrivelse_feil:
                 printf("Bane Beskrivelse: ");
-                scanf("%s", &tempBeskrivelse);
-                getchar();
-                if(strlen(&tempBeskrivelse) > STRLEN -1){
-                    printf("Din input på %i er større enn maks lengde på %i",strlen(&tempBeskrivelse) +1, STRLEN);
-                    goto beskrivelse_feil; 
-                }
-                strcpy(baneBeskrivelse[antallBaner + 1], "fuckoff"); 
+                fgets(tempBeskrivelse, STRLEN -1, stdin);
+                strcpy(baneBeskrivelse[antallBaner], tempBeskrivelse); 
+
+                antallBaner ++;
+                goto ask_for_input;
 
             }
 
             break;
         
         case 83: //S
-            printf("Bruker S");
-            break;
+            int printPointer = 0;
+            int parCounter = 0;
+            while(printPointer < antallBaner){
+                printf("Bane %i", printPointer +1); 
+                printf("\n    Lengde: %i", baneLengde[printPointer]);
+                printf("\n    Par: %i",banePar[printPointer]);
+                if(baneOB[printPointer]){
+                    printf("\n    Uten OB");
+                }
+                else{
+                    printf("\n    Med OB");
+                }
+                printf("\n    Beskrivelse: %s \n",baneBeskrivelse[printPointer]);
+                parCounter += banePar[printPointer];
+                printPointer ++; 
+            }
+            printf("\nAntall baner: %i", antallBaner);
+            printf("\nFor å havne på par brukes %i kast.\n", parCounter); 
+            goto ask_for_input;
 
         case 81: //Q
-            printf("Bruker Q");
-            break;
+            printf("\n\nProgrammet lukkes!");
+            return 0;
         
         default:
             printf("\nInput ikke L,S eller Q \n");
