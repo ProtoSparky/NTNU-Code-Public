@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdbool.h>
+#include <ctype.h>
 
 const int MAXBANER = 18; ///< Maks antall baner.
 const int STRLEN = 100; ///< Maks tekstlengde.
@@ -31,13 +32,26 @@ int menu(){
     
     scanf("%c", &userInput);
 
-    switch(userInput):
-        case "L":
-        printf("Bruker L");
-        break;
-        case "S":
-        printf("Bruker S");
+
+    switch(toupper(userInput)){
+        case 76: //L
+            printf("Bruker L");
+            break;
         
+        case 83: //S
+            printf("Bruker S");
+            break;
+
+        case 81: //Q
+            printf("Bruker Q");
+            break;
+        
+        default:
+            printf("\nInput ikke L,S eller Q");
+            menu();
+            break;
+        
+    }
 
 
     return 0; 
