@@ -1,8 +1,5 @@
 import socket
-import re
 import time
-
-
 def netcat(ip, port, message, timeout=10):
     try:
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -21,7 +18,6 @@ def netcat(ip, port, message, timeout=10):
         return f"Error: {e}"
 
 # Below is what captured the flag lmao 
-
 maxchars = 10000000000
 string = ""
 while len(string) < maxchars:

@@ -1,29 +1,27 @@
 /**
- *   @file     oblig2.c
+ *   @file     oblig2-R.c
  *   @author   Kristupas Kaupas
- *   @date     2025-10-06
- *   @brief    Obligatorisk oppgave nummer 2
+ *   @date     2025-10-13
+ *   @brief    Obligatorisk oppgave nummer 2 - Reinnlevering
  *   @details  Samler inn data for frisbeegolf baner og presenterer det pent
  */
 
-#include <stdio.h>                      //scanf, print, gets
-#include <stdbool.h>                    // booleans
-#include <ctype.h>                      //toupper
-#include <string.h>                     //strcpy
+#include <stdio.h>                                          //scanf, print, gets
+#include <stdbool.h>                                        // booleans
+#include <ctype.h>                                          //toupper
+#include <string.h>                                         //strcpy
 
 const int MAXBANER = 18; ///< Maks antall baner.
 const int STRLEN = 100; ///< Maks tekstlengde.
 int hentBaneLengde(int antallBaner); 
 int hentPar();
-int hentBaneOB();
+bool hentBaneOB();
+
 /**
  * @brief Startpunktet for programmet.
  * @details Henter og presenterer informasjon for frisbeegolf baner
  * @return returnerer int 0 etter den var kjørt
- * @note Bruk av goto var for å unngå ekstremt mange nested while loops.
  */
-
-
 int main(){
     char baneBeskrivelse[MAXBANER][STRLEN];         // Beskrivelse av banene.
     int baneLengde[MAXBANER];                       // Banenes lengde (i meter).
@@ -31,8 +29,7 @@ int main(){
                                    // for hver enkelt bane.
     bool baneOB[MAXBANER];                          // Har banene out of bounds
     int antallBaner;                                // Antall baner pr.nå
-
-                                   //Setter inn verdiene for bane 1 og 2    
+                                           //Setter inn verdiene for bane 1 og 2    
     antallBaner = 2;
     baneLengde[0] = 62;
     baneLengde[1] = 94;
@@ -44,23 +41,18 @@ int main(){
     strcpy(baneBeskrivelse[1], "Flatt terreng gjennom hele banen");
  
 
-    //char userInput[100];                              //Input array for menyvalg
-    char userInput;
-
+    char userInput[100];                              //Input array for menyvalg
     while(true){
         printf("Menyvalg:");
         printf("\n    L - Legge til bane");
         printf("\n    S - Se alle baner");
         printf("\n    Q - Asvlutt");
         printf("\nValg:");
-        //fgets(userInput, sizeof(userInput), stdin);       //Henter input uten /n
-        scanf("%c", &userInput);
-        getchar();
-        char userChoise = toupper(userInput);            //Tar første bokstav
+        fgets(userInput, sizeof(userInput), stdin);       //Henter input uten /n
+        char userChoise = toupper(userInput[0]);            //Tar første bokstav
 
         switch(userChoise){
                 case 'L':{                                      //Legge til bane
-
                     if(antallBaner >= MAXBANER){ //tester om max baner er lagret
                         printf("Du har nådd maks baner");
                         printf(", og kan ikke legge til flere.\n");
@@ -79,8 +71,7 @@ int main(){
                     baneLengde[antallBaner] = tempBaneLengde; 
 
                                            //lagrer data for antall par på banen
-                    banePar[antallBaner] = hentPar(); 
-
+                    banePar[antallBaner] = hentPar();
 
                              //lagrer true eller false for om det er OB på banen
                     baneOB[antallBaner] = hentBaneOB(); 
@@ -96,35 +87,34 @@ int main(){
 
                 }
                 case 'S':{                              //Se alle baner
-                    int printPointer = 0;               //pointer for while loop
+                    int printPointer;                   //pointer for while loop
                     int parCounter = 0;                 //teller for totale par
-                    while(printPointer < antallBaner){
+                    for(printPointer = 0; printPointer < antallBaner;){
                         printf("Bane %i", printPointer +1); 
                         printf("\n    Lengde: %i", baneLengde[printPointer]);
                         printf("\n    Par: %i",banePar[printPointer]);
                         
                         //printer "Uten." eller "Med." basert på 0 og 1 i array
                         if(baneOB[printPointer]){
-                            printf("\n    Uten OB");
-                        }
-                        else{
                             printf("\n    Med OB");
                         }
-                        printf("\n    Beskrivelse: %s\n",baneBeskrivelse[printPointer]);
+                        else{
+                           printf("\n    Uten OB");
+                        }
+                        printf("\n    Beskrivelse: %s\n",
+                        baneBeskrivelse[printPointer]);
                                           //Øker "par telller" med nåverende par
                         parCounter += banePar[printPointer]; 
                         printPointer ++;
                     }
                     printf("\nAntall baner: %i", antallBaner);
-                    printf("\nFor å havne på par brukes %i kast.\n", parCounter); 
+                    printf("\nFor å havne på par brukes %i kast.\n",parCounter); 
                     continue;                    //Hopper tilbake til hoved meny
                 }
                 case 'Q':{                                             //Avslutt 
                     printf("\n\nProgrammet lukkes!");
                     return 0;
                 }
-
-                
             }
     }
     return 0;
@@ -132,8 +122,8 @@ int main(){
 /**
  * @brief Henter bane lengde for menyvalg L
  * @details Spør bruker om banelengde, og returnerer verdi
- * @note int -1 blir returnert hvis bruker ønsker å gå tilbake til menyvalg
- * @return int
+ * @param[in] antallBaner
+ * @return int bane lengde, eller -1 hvis bruker kansellerer input
  */
 int hentBaneLengde(int antallBaner){
     int tempBaneLengde;
@@ -179,11 +169,11 @@ int hentPar(){
  * @return returnerer bool
  * @note Bare returns når bruker input er riktig
  */
-int hentBaneOB(){
+bool hentBaneOB(){
     while(true){
         char tempOB;
         printf("Har banen OB (J/N): ");
-        scanf("%c", &tempOB);
+        scanf(" %c", &tempOB);
         getchar();
         if(toupper(tempOB) == 'J'){                            //Hvis input er J
             return true;
