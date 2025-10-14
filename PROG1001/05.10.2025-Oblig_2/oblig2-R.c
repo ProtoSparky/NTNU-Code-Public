@@ -122,7 +122,7 @@ int main(){
 /**
  * @brief Henter bane lengde for menyvalg L
  * @details Spør bruker om banelengde, og returnerer verdi
- * @param[in] antallBaner
+ * @param[in] antallBaner 
  * @return int bane lengde, eller -1 hvis bruker kansellerer input
  */
 int hentBaneLengde(int antallBaner){
