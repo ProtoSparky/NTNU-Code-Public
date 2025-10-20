@@ -1,15 +1,16 @@
 /**
- *  Skjelett/grunnlag for oblig nr 3 i GrProg, h�sten 2025.
+ *  Modifisert skjelett/grunnlag for oblig nr 3 i GrProg, høsten 2025.
  *
- * @file    Oblig3.tpl
- * @author  Malin Foss, William Eide Seiner & FrodeH
+ * @file    Oblig3.c
+ * @author  Malin Foss, William Eide Seiner & FrodeH, Kristupas Kaupas
+ * @date    21.10.2025
  */
 
 
 #include <stdio.h>          //  printf, scanf
 #include <stdbool.h>        //  bool
 #include <ctype.h>          //  toupper
-#include <math.h>           //kvadratrot
+#include <math.h>           //  kvadratrot
 
 #define  ANTRUTER    9      ///<  Antall ruter på brettet
 const int STRLEN  = 80;     ///<  Tekstlengde
@@ -146,25 +147,25 @@ bool sjekkVinner() {
  *  Skriver ut spillebrettet.
  */
 void skrivBrett() {
-  int kv = sqrt(ANTRUTER); 
+  int kv = sqrt(ANTRUTER);                    //finner lengde/bredde på rutnett  
   int teller = 0; 
-  for(int y = 0; y < kv; y++){
-    for(int x1 = 0; x1 < kv; x1++){
-      printf("---%i--",(y * kv + x1)+1);
-      if(x1 == kv-1){
-        printf("-");
+  for(int y = 0; y < kv; y++){                
+    for(int x1 = 0; x1 < kv; x1++){         //går gjennom alle mulige tall for y
+      printf("---%i--",(y * kv + x1)+1);    
+      if(x1 == kv-1){                       
+        printf("-");                        //legger på - på slutten for pynt
       }
     }
-    printf("\n");
+    printf("\n");                     //Tallene ferdigprintet. Starter på X og O
     for(int x2 = 0; x2 < kv; x2 ++){
       if(x2 == 0){
-        printf("|  %c",gBrett[teller]);
+        printf("|  %c",gBrett[teller]);              //Sentrerer tekst i starten
       }
       else{
-        printf("  |  %c",gBrett[teller]);
+        printf("  |  %c",gBrett[teller]);            //sentrerer tekst i midten
       }
       if(x2 == kv -1){
-        printf("  |"); 
+        printf("  |");                     //Sentrerer tekst på slutten av linja
       }
       teller ++;
     }
@@ -184,16 +185,16 @@ void skrivBrett() {
  */
 int spillSpillet() {
   while(true){
-    bool spiller1Spiller = true; 
+    bool spiller1Spiller = true;      //Hjelpevariabel hvis sjekkBrett() = false
     bool spiller2Spiller = true;
 
 
     //sjekk om det er noen plasser igjen
     int ruterIgjen = 0;
     for(int i = 0; i<ANTRUTER; i++){
-        if(sjekkBrett(i)){ruterIgjen ++;}
+        if(sjekkBrett(i)){ruterIgjen ++;}//Sjekker alle mulige ruter
     }
-    if(ruterIgjen == 0){return 0;}
+    if(ruterIgjen == 0){return 0;}      //Ingen ruter igjen for spillere å bruke
 
     //spiller 1
     do{
@@ -201,17 +202,18 @@ int spillSpillet() {
       int spillerInput;
       printf("Spiller 1, ditt trekk: ");
       scanf(" %d", &spillerInput); 
-      if(!sjekkBrett(spillerInput -1)){
+      if(!sjekkBrett(spillerInput -1)){    //Feil hvis input er på opptatt plass
         printf("Du kan ikke sette din brikke her!\n");
         skrivBrett(); 
       }
       else{
-        spiller1Spiller = false;
-        gBrett[spillerInput -1] = 'X';
-        if(sjekkVinner()){skrivBrett();return 1;}
+        spiller1Spiller = false;              //Spiller var ferdig med sin input
+        gBrett[spillerInput -1] = 'X';                  //Lagre input
+        if(sjekkVinner()){skrivBrett();return 1;}       //Sjekk om spiller vant
       }
     }
     while(spiller1Spiller); 
+
 
     //sjekk om det er noen plasser igjen
     ruterIgjen = 0;
@@ -227,19 +229,17 @@ int spillSpillet() {
       int spillerInput;
       printf("Spiller 2, ditt trekk: ");
       scanf(" %d", &spillerInput); 
-      if(!sjekkBrett(spillerInput -1)){
+      if(!sjekkBrett(spillerInput -1)){    //Feil hvis input er på opptatt plass
         printf("Du kan ikke sette din brikke her!\n");
         skrivBrett(); 
       }
       else{
-        spiller2Spiller = false;
-        gBrett[spillerInput -1] = 'O';
-        if(sjekkVinner()){skrivBrett();return 2;}
+        spiller2Spiller = false;                  //Spiller ferdig med sin input
+        gBrett[spillerInput -1] = 'O';                   //Lagre input
+        if(sjekkVinner()){skrivBrett();return 2;}        //Sjekk om spiller vant
       }
     }
     while(spiller2Spiller); 
-
   }
-
 }
 
