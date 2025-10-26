@@ -93,23 +93,25 @@ bool sjekkVinner() {
   int oTeller;               //Teller for hvor mange O-er algoritmene har funnet
   int xTeller;               //-||- men for X
   bool vinnerFunnet = false;//Settes til true hvis en av spillerene har 3 på rad
+  int ruteVerdi;
 
   //Sjekker horisontal
   for(int y = 0; y < rutenettLengde; y++){
     oTeller = 0;
     xTeller = 0;
     for(int x = 0; x < rutenettLengde; x ++){
-      int ruteVerdi = gBrett[y * rutenettLengde + x]; 
-                    //verdi på rute ved bruk av x og y kordinater i skrivBrett()
+      ruteVerdi = gBrett[y * rutenettLengde + x];   //verdi på rute ved bruk av
+                                                    // x og y kordinater i 
+                                                    // skrivBrett()
                                               
-      if(ruteVerdi == 'X'){xTeller ++;}                   //Teller antall X og O
+      if(ruteVerdi == 'X'){xTeller ++;}             //Teller antall X og O
       else if(ruteVerdi == 'O'){oTeller ++;}
     }
+    //Sjekker om det er 3 X eller O for 
+    //hver eneste linje (1-3), (4-6), etc på skrivBrett rutenett
     if(oTeller == rutenettLengde || xTeller == rutenettLengde){
       vinnerFunnet = true; 
     }  
-    //Sjekker om det er 3 X eller O for 
-    //hver eneste linje (1-3), (4-6), etc på skrivBrett rutenett
   }
 
   //sjekker vertikal
@@ -117,11 +119,11 @@ bool sjekkVinner() {
     oTeller = 0;
     xTeller = 0;
     for(int y = 0; y<rutenettLengde; y++){
-      int ruteVerdi = gBrett[y * rutenettLengde + x]; //Finner indeks i rutenett
+                                //Sjekker det samme som i horisontal, men nå for 
+                                // kolonner (1-7), (5-8), etc
+      ruteVerdi = gBrett[y * rutenettLengde + x];
       if(ruteVerdi == 'X'){xTeller++;}
-      else if(ruteVerdi == 'O'){oTeller ++;}       //Sjekker det samme som i
-                                                   // horisontal, men nå for 
-                                                   // kolonner (1-7), (5-8), etc
+      else if(ruteVerdi == 'O'){oTeller ++;}
     }
     if(oTeller == rutenettLengde || xTeller==rutenettLengde){
       vinnerFunnet = true;
@@ -132,23 +134,20 @@ bool sjekkVinner() {
   oTeller = 0;
   xTeller = 0;
   for(int xy = 0; xy < rutenettLengde; xy ++){
-    int ruteVerdi = gBrett[xy * rutenettLengde + xy];        
-                                                 //Beregner indeks for diagonale
-                                                 // bevegelser
+    ruteVerdi = gBrett[xy * rutenettLengde + xy];
     if(ruteVerdi == 'X'){xTeller++;}else if(ruteVerdi == 'O'){oTeller++;}
   }
   if(oTeller == rutenettLengde || xTeller == rutenettLengde){
     vinnerFunnet = true; 
-  }                                           //Bare en diagonal bevegelse i den 
-                                              // retningen, så ingen loop brukes
+  }                                         //Bare en diagonal bevegelse i den 
+                                            // retningen, så bare 1 loop brukes
 
 
   //sjekker diagonal mot venstre
   oTeller = 0;
   xTeller = 0;
   for(int xy = 0; xy < rutenettLengde; xy++){
-    int ruteVerdi = gBrett[(rutenettLengde - 1 - xy) * rutenettLengde + xy]; 
-                                //Ruter verdi for diagonal bevegelse mot venstre
+    ruteVerdi = gBrett[(rutenettLengde - 1 - xy) * rutenettLengde + xy]; 
     if(ruteVerdi == 'X'){xTeller++;} else if(ruteVerdi == 'O'){oTeller++;}
   }
   if (oTeller == rutenettLengde || xTeller == rutenettLengde){
@@ -163,7 +162,7 @@ bool sjekkVinner() {
  *  Skriver ut spillebrettet.
  */
 void skrivBrett() {
-  int rutenettLengde = sqrt(ANTRUTER);//finner lengde/bredde på rutnett  
+  int rutenettLengde = sqrt(ANTRUTER);         //finner lengde/bredde på rutnett  
   int teller = 0; 
   for(int y = 0; y < rutenettLengde; y++){                
     for(int x1 = 0; x1 < rutenettLengde; x1++){    //går gjennom alle tall for y
@@ -232,5 +231,3 @@ int spillSpillet() {
   }
   while(!sjekkVinner());
 }
-
-
