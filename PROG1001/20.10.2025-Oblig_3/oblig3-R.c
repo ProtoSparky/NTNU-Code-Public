@@ -64,7 +64,7 @@ int main() {
  */
 void nullstillBrett() {
   for(int i =0; i<ANTRUTER; i++){
-    gBrett[i] = ' ';   //Fyller alle mulige plasser med noe annet enn X eller O
+    gBrett[i] = ' ';                              //Tømmer alle runter
   }
 }
 
@@ -76,8 +76,8 @@ void nullstillBrett() {
  *  @return	  Om det var mulig å sette brikken der (true) eller ei (false)
  */
 bool sjekkBrett(const int n) {
-  if(n >ANTRUTER){return false;}                  //Input er større enn array
-  if(gBrett[n] == ' '){return true;}              //Input er på verken X eller O
+  if(n >ANTRUTER){return false;}                  //Ugyldig rutenummer
+  if(gBrett[n] == ' '){return true;}              //True hvis ruten er ledig
   else{return false;}                             //Input er på X eller O
 }
 
@@ -89,9 +89,9 @@ bool sjekkBrett(const int n) {
  */
 bool sjekkVinner() {
   //sjekker horisontal
-  int rutenettLengde = sqrt(ANTRUTER);//Tar kvadratrot for å finne lengde/bredde på rutenett
-  int oTeller; //Teller for hvor mange O-er algoritmene har funnet
-  int xTeller; //-||-
+  int rutenettLengde = sqrt(ANTRUTER);        //Finner lengde/bredde på rutenett
+  int oTeller;               //Teller for hvor mange O-er algoritmene har funnet
+  int xTeller;               //-||- men for X
   bool vinnerFunnet = false;//Settes til true hvis en av spillerene har 3 på rad
 
   //Sjekker horisontal
@@ -99,15 +99,17 @@ bool sjekkVinner() {
     oTeller = 0;
     xTeller = 0;
     for(int x = 0; x < rutenettLengde; x ++){
-      int ruteVerdi = gBrett[y * rutenettLengde + x];     //Gjør om X og Y til indeks (0-8) 
-                                              //i array
-      if(ruteVerdi == 'X'){xTeller ++;}            //Teller antall X og O
+      int ruteVerdi = gBrett[y * rutenettLengde + x]; 
+                    //verdi på rute ved bruk av x og y kordinater i skrivBrett()
+                                              
+      if(ruteVerdi == 'X'){xTeller ++;}                   //Teller antall X og O
       else if(ruteVerdi == 'O'){oTeller ++;}
     }
     if(oTeller == rutenettLengde || xTeller == rutenettLengde){
       vinnerFunnet = true; 
-    }  //Sjekker om det er 3 X eller O for 
-    //hver eneste linje (1-3), (4-6) etc
+    }  
+    //Sjekker om det er 3 X eller O for 
+    //hver eneste linje (1-3), (4-6), etc på skrivBrett rutenett
   }
 
   //sjekker vertikal
@@ -115,11 +117,11 @@ bool sjekkVinner() {
     oTeller = 0;
     xTeller = 0;
     for(int y = 0; y<rutenettLengde; y++){
-      int ruteVerdi = gBrett[y * rutenettLengde + x];       //Finner indeks i rutenett
+      int ruteVerdi = gBrett[y * rutenettLengde + x]; //Finner indeks i rutenett
       if(ruteVerdi == 'X'){xTeller++;}
-      else if(ruteVerdi == 'O'){oTeller ++;}         //Sjekker det samme som i
-                                                // horisontal, men nå for 
-                                                // kolonner (1-7), (5-8), etc
+      else if(ruteVerdi == 'O'){oTeller ++;}       //Sjekker det samme som i
+                                                   // horisontal, men nå for 
+                                                   // kolonner (1-7), (5-8), etc
     }
     if(oTeller == rutenettLengde || xTeller==rutenettLengde){
       vinnerFunnet = true;
@@ -130,13 +132,14 @@ bool sjekkVinner() {
   oTeller = 0;
   xTeller = 0;
   for(int xy = 0; xy < rutenettLengde; xy ++){
-    int ruteVerdi = gBrett[xy * rutenettLengde + xy];        //Beregner indeks for diagonale
+    int ruteVerdi = gBrett[xy * rutenettLengde + xy];        
+                                                 //Beregner indeks for diagonale
                                                  // bevegelser
     if(ruteVerdi == 'X'){xTeller++;}else if(ruteVerdi == 'O'){oTeller++;}
   }
   if(oTeller == rutenettLengde || xTeller == rutenettLengde){
     vinnerFunnet = true; 
-  }    //Bare en diagonal bevegelse i den 
+  }                                           //Bare en diagonal bevegelse i den 
                                               // retningen, så ingen loop brukes
 
 
@@ -144,7 +147,8 @@ bool sjekkVinner() {
   oTeller = 0;
   xTeller = 0;
   for(int xy = 0; xy < rutenettLengde; xy++){
-    int ruteVerdi = gBrett[(rutenettLengde - 1 - xy) * rutenettLengde + xy];     //Invers diagonal index
+    int ruteVerdi = gBrett[(rutenettLengde - 1 - xy) * rutenettLengde + xy]; 
+                                //Ruter verdi for diagonal bevegelse mot venstre
     if(ruteVerdi == 'X'){xTeller++;} else if(ruteVerdi == 'O'){oTeller++;}
   }
   if (oTeller == rutenettLengde || xTeller == rutenettLengde){
@@ -159,13 +163,13 @@ bool sjekkVinner() {
  *  Skriver ut spillebrettet.
  */
 void skrivBrett() {
-  int rutenettLengde = sqrt(ANTRUTER);                    //finner lengde/bredde på rutnett  
+  int rutenettLengde = sqrt(ANTRUTER);//finner lengde/bredde på rutnett  
   int teller = 0; 
   for(int y = 0; y < rutenettLengde; y++){                
-    for(int x1 = 0; x1 < rutenettLengde; x1++){         //går gjennom alle mulige tall for y
+    for(int x1 = 0; x1 < rutenettLengde; x1++){    //går gjennom alle tall for y
       printf("---%i--",(y * rutenettLengde + x1)+1);    
       if(x1 == rutenettLengde-1){                       
-        printf("-");                        //legger på - på slutten for pynt
+        printf("-");                           //legger på - på slutten for pynt
       }
     }
     printf("\n");                     //Tallene ferdigprintet. Starter på X og O
@@ -196,62 +200,37 @@ void skrivBrett() {
  *  @see      sjekkVinner(...)
  */
 int spillSpillet() {
-  while(true){
-    bool spiller1Spiller = true;      //Hjelpevariabel hvis sjekkBrett() = false
-    bool spiller2Spiller = true;
+  bool spillerTeller = false;              //False = spiller 1. True = Spiller 2
+  char spillerBokstav[2];
+  spillerBokstav[0]='X';
+  spillerBokstav[1]='O';
+  int ruterIgjen;
+  int spillerInput;
 
-
-    //sjekk om det er noen plasser igjen
-    int ruterIgjen = 0;
-    for(int i = 0; i<ANTRUTER; i++){
-        if(sjekkBrett(i)){ruterIgjen ++;}//Sjekker alle mulige ruter
-    }
-    if(ruterIgjen == 0){return 0;}      //Ingen ruter igjen for spillere å bruke
-
-    //spiller 1
-    do{
-      skrivBrett();
-      int spillerInput;
-      printf("Spiller 1, ditt trekk: ");
-      scanf(" %d", &spillerInput); 
-      if(!sjekkBrett(spillerInput -1)){    //Feil hvis input er på opptatt plass
-        printf("Du kan ikke sette din brikke her!\n");
-        skrivBrett(); 
-      }
-      else{
-        spiller1Spiller = false;              //Spiller var ferdig med sin input
-        gBrett[spillerInput -1] = 'X';                  //Lagre input
-        if(sjekkVinner()){skrivBrett();return 1;}       //Sjekk om spiller vant
-      }
-    }
-    while(spiller1Spiller); 
-
-
+  do{
     //sjekk om det er noen plasser igjen
     ruterIgjen = 0;
     for(int i = 0; i<ANTRUTER; i++){
-        if(sjekkBrett(i)){ruterIgjen ++;}
+        if(sjekkBrett(i)){ruterIgjen ++;}            //Sjekker alle mulige ruter
     }
-    if(ruterIgjen == 0){return 0;}
+    if(ruterIgjen == 0){return 0;}               //Alle ruter tatt. Ingen vinner   
 
-
-    //spiller 2
-    do{
-      skrivBrett();
-      int spillerInput;
-      printf("Spiller 2, ditt trekk: ");
-      scanf(" %d", &spillerInput); 
-      if(!sjekkBrett(spillerInput -1)){    //Feil hvis input er på opptatt plass
-        printf("Du kan ikke sette din brikke her!\n");
-        skrivBrett(); 
-      }
-      else{
-        spiller2Spiller = false;                  //Spiller ferdig med sin input
-        gBrett[spillerInput -1] = 'O';                   //Lagre input
-        if(sjekkVinner()){skrivBrett();return 2;}        //Sjekk om spiller vant
-      }
+    skrivBrett(); 
+    printf("Spiller %i, ditt trekk: ", spillerTeller + 1);
+    scanf(" %d", &spillerInput); 
+    if(!sjekkBrett(spillerInput -1)){                   //Ruten allerede opptatt
+      printf("Du kan ikke sette din brikke her!\n");
+      skrivBrett(); 
     }
-    while(spiller2Spiller); 
+    else{
+      gBrett[spillerInput -1] = spillerBokstav[spillerTeller];     //Lagre input
+      if(sjekkVinner()){
+        skrivBrett();return spillerTeller +1;          //Stopp hvis spiller vant
+      }
+      spillerTeller = !spillerTeller;                  //Bytter spiller
+    }      
   }
+  while(!sjekkVinner());
 }
+
 
