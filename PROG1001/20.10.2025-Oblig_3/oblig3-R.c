@@ -3,14 +3,14 @@
  *
  * @file    Oblig3-R.c
  * @author  Kristupas Kaupas
- * @date    21.10.2025
+ * @date    26.10.2025
  */
 
 
 #include <stdio.h>          //  printf, scanf
 #include <stdbool.h>        //  bool
 #include <ctype.h>          //  toupper
-#include <math.h>           //  rutenettLengdeadratrot
+#include <math.h>           //  kvadratrot
 
 #define  ANTRUTER    9      ///<  Antall ruter på brettet
 const int STRLEN  = 80;     ///<  Tekstlengde
