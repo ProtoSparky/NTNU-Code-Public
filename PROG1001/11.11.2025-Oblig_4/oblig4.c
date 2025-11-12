@@ -85,7 +85,7 @@ int main() {
         }
         kommando = lesChar("\nKommando");
     };
-
+    
     fjernAllkokerteData();
 
 return 0;
@@ -148,9 +148,24 @@ void leggTilEttProdukt()  {
  *  @see   produsentLesData(...)
  */
 void nyProdusent()  {
+    //check for max amount of manufacturers
+    char produsentNavn[STRLEN];
+    memset(produsentNavn, 0, sizeof(produsentNavn)); //setter array til 0
 
-//     Lag innmaten
-}
+    bool produsentEksisterer = false;
+    if(gAntallProdusenter == MAXPRODUSENTER){
+        printf("Det er allerede fullt med produsenter");
+    }
+    printf("Skriv in produsent navn ");
+    fgets(produsentNavn, STRLEN, stdin);
+    
+
+    //g. Ellers lages en ny produsent, antall produsenter telles opp, og produsentens data leses inn av
+    struct Produsent* produsentStruct = malloc(sizeof(struct Produsent)); //initialiserer produsent
+
+    produsentLesData(produsentStruct, produsentNavn); 
+
+} 
 
 
 /**
@@ -161,7 +176,7 @@ void nyProdusent()  {
  */
 void produktLesData(struct Produkt* produkt, const char* navn){
 
-//     Lag innmaten
+
 }
 
 
@@ -196,6 +211,46 @@ void produktSlettData(struct Produkt* produkt) {
  *  @see     produsentNyttProdukt(...)
  */
 void produsentLesData(struct Produsent* produsent, const char* navn){
+    char input[STRLEN];
+    bool inputIkkeFerdig = true;
+    bool produktNavnEksisterer = false;
+    int produktPeker;
+    char produktNavn[STRLEN];
+    memset(produktNavn, 0, sizeof(produktNavn)); //setter array til 0
+
+    produsent->navn = navn;
+    produsent->antallProdukter = 0;
+    printf("Hvilken by er %s i?: ", navn);
+    fgets(input, STRLEN, stdin);
+    produsent->by = input;
+
+    struct Produkt* prod = malloc(sizeof(struct Produkt)); //allocate memory for products
+    do{
+        if(produsent->antallProdukter < MAXPRODUKTER){
+            printf("Produsenten har nådd maks produkter!");
+            inputIkkeFerdig = false; //NEEDS TO BE FIXED
+        }
+
+        do{
+            //spør om produkt navn
+            printf("Skriv inn produkt navn for %s", navn);
+            fgets(produktNavn, STRLEN, stdin);
+            produktPeker = finnProdukt(produsent, produktNavn);
+            if(produktPeker != NULL){
+                printf("Produktet eksisterer allerede. Prøv på nytt!");
+                produktNavnEksisterer = true;
+            }
+
+        }
+        while(produktNavnEksisterer);
+
+        
+        
+
+
+    }
+    while(inputIkkeFerdig);
+
 
 //     Lag innmaten
 }
