@@ -100,8 +100,12 @@ return 0;
  *  @return   Peker til produktet eller NULL
  */
 struct Produkt* finnProdukt(const struct Produsent* produsent, const char* navn) {
-
-//     Lag innmaten
+    for(int i = 0; i < produsent->antallProdukter; i++){
+        if(strcmp(produsent->produktene[i]->navn, navn) == 0){
+            return produsent->produktene[i];
+        }
+    }
+    return NULL; 
 }
 
 
@@ -214,8 +218,9 @@ void produsentLesData(struct Produsent* produsent, const char* navn){
     char input[STRLEN];
     bool inputIkkeFerdig = true;
     bool produktNavnEksisterer = false;
-    int produktPeker;
+    struct Produkt *produktPeker;
     char produktNavn[STRLEN];
+    int menyInput; 
     memset(produktNavn, 0, sizeof(produktNavn)); //setter array til 0
 
     produsent->navn = navn;
@@ -244,10 +249,15 @@ void produsentLesData(struct Produsent* produsent, const char* navn){
         }
         while(produktNavnEksisterer);
 
-        
-        
+        produsentNyttProdukt(produsent, navn);
 
-
+        
+        printf("Legge til et nytt produkt (J/N): ");
+        scanf(" %c", menyInput);
+        menyInput = toupper(menyInput); 
+        if(menyInput = 'J'){inputIkkeFerdig = true;}
+        else{inputIkkeFerdig = false;}
+        
     }
     while(inputIkkeFerdig);
 
