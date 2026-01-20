@@ -32,9 +32,36 @@ int main()
     /*
     * requires included iomanip
     cout << setw(6) << 10 << setw(6) << 900 << setw(6);
-    */
+    
 
     char tegn;
     char string[100];
-    
+    */
+
+
+    /* some string bullshit */
+
+    string test = "blah blah blah"; 
+    string test2(10, '!'); /*10 characters of "!" */
+    string test3; /*blank sting*/
+
+    /*single chars
+    cout << "enter single char";
+    cin >> test3; 
+    cin.ignore();
+    cout << "test + '" << test3 << "'";
+    */
+
+    /*multiple chars
+    cout << "enter multiple chars ";
+    getline(cin, test3); 
+    cout << test3; */
+
+    /*compare text
+    if(test == test2){} //both are equal
+    if(test < test2){} // test smaller than test2 aplhabetically
+    */
+
+    /*get text length
+    cout << test.length(); */
 }
