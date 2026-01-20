@@ -18,5 +18,8 @@
     <ClCompile Include="06.01.2026.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

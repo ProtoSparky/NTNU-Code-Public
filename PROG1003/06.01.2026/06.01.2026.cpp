@@ -1,6 +1,9 @@
 #include <iostream>
 #include <iomanip>
 using namespace std; //Dont need std::cout /std::cin
+void getnums(int& input1, int& input2);
+
+
 int main()
 {
 
@@ -64,4 +67,30 @@ int main()
 
     /*get text length
     cout << test.length(); */
+
+
+
+	/*Overloading*/
+	// Function overloading allows multiple functions to have the same name, as long as their parameters are different in type or number:
+	//float somefunctionname(const int hours, const float days); 
+
+	/*variable references*/
+	/*
+	int input1, input2; 
+	getnums(input1, input2);
+	cout << "Numbers are '" << input1 << " and " << input2 << "'"; 
+	*/
+
+
+
+}
+
+
+void getnums(int& input1, int& input2) {
+	/*variable references*/
+	/*input 1 and 2 are updated from wherever this function is run. NOT COPIED*/
+	cout << "enter an integer";
+	cin >> input1;
+	cout << "enter a second integer";
+	cin >> input2;
 }
