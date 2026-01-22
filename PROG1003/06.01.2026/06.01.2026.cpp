@@ -81,11 +81,28 @@ int main()
 	cout << "Numbers are '" << input1 << " and " << input2 << "'"; 
 	*/
 
+	int input, input2;
+	//getnums(input, input2); 
 
-
+	
+	const int MAXNUMS = 5000;
+	for (int i = 0; i < MAXNUMS; i++) {
+		if (i % 2) {
+			cout << i << " is prime \n";
+		}
+	}
+	
 }
 
 
+
+
+
+/**
+ * @brief  Asks for input of 2 numbers.
+ * @param input1
+ * @param input2
+ */
 void getnums(int& input1, int& input2) {
 	/*variable references*/
 	/*input 1 and 2 are updated from wherever this function is run. NOT COPIED*/
@@ -94,3 +111,7 @@ void getnums(int& input1, int& input2) {
 	cout << "enter a second integer";
 	cin >> input2;
 }
+
+
+
+
