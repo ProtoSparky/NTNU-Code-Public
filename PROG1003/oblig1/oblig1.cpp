@@ -49,35 +49,34 @@ void slettRute();
 void slett(const int nr);
 void slett();
 
+/**
+ * @brief UI - Menyvalg i konsollen.
+ */
 void skrivMeny() {
 	char input = '\0';
 	cout << "Velg et valg\n";
-	cout << "   " << "N = Sett rute\n" << "   " << "S = Slett rute\n"
-		<< "   " << "A = Skriv ut alle ruter \n" << "   "
-		<< "B = Skriv ut alle busstopp\n"; 
+	cout << "   " << "N = Sett rute\n"
+		 << "   " << "S = Slett rute\n"
+		 << "   " << "A = Skriv ut alle ruter \n"
+		 << "   " << "B = Skriv ut alle busstopp\n";
 	while (input != 'Q') {
 		input = lesChar("Input");
 		if (input == 'N') {
-			//Ny rute
 			nyRute(); 
 		}
 		else if (input == 'S') {
-			//Slett rute
 			slettRute(); 
 		}
 		else if (input == 'A') {
-			//Skriv alle ruter
 			skrivRuter();
 		}
 		else if (input == 'B') {
-			//skriv alle busstopp
 			skrivStopp(); 
 		}
 	}
 	cout << "Program stoppes!!";
 
 };
-
 
 /**
  * @brief UI - Skriver navnent på alle lagrede stoppesteder fra 1 og oppover.
@@ -89,8 +88,6 @@ void skrivStopp() {
 		cout << setw(3)<<i + 1 << " | " << gBusstopp[i] << "\n"; 
 	}
 }
-
-
 
 /**
  * @brief UI - Lar bruker sette sammen ruter.
@@ -135,7 +132,6 @@ bool ruteLesData(Rute& rute) {
 
 }
 
-
 /**
  * @brief Skriver lovlige stoppeseder ut fra stopp nr .
  * @param stopp - int for busstopp indeks
@@ -163,7 +159,6 @@ void nyRute() {
 		cout << setw(6) << gRuter.size() << " | "; 
 		ruteSkrivData(*nyRute); 
 	}
-
 }
 
 /**
@@ -177,6 +172,7 @@ void skrivRuter() {
 	}
 
 }
+
 /**
  * @brief Skriver ut all info om ruten som ble lagret, og dens indeks.
  * @param rute - Struct
@@ -189,26 +185,25 @@ void ruteSkrivData(const Rute rute) {
 			cout << "-- > "; 
 		}
 	}
-	cout << "\n"; 
-	
+	cout << "\n"; 	
 }
 
 /**
  * @brief UI for sletting av ruter.
  */
 void slettRute() {
-	bool harRuter = true; 
+	bool harRuter = true;
+
 	if (gRuter.empty()) {
 		cout << "Ingen ruter lagret\n";
 		harRuter = false;
 	}
-
 	while (harRuter) {
 		skrivRuter();
 		cout << "\n";
 		int brukerValg = lesInt("Skriv inn rute index, 0 for ingen, -1 for alle", -1, gRuter.size());
 		if (brukerValg == -1) {
-			//slett alle
+			//slett alle ruter
 			slett();
 			harRuter = false;
 		}
@@ -217,14 +212,11 @@ void slettRute() {
 			harRuter = false; 
 		}
 		else {
-			//slett spesifikk 
+			//slett spesifikk rute
 			slett(brukerValg - 1); 
 			harRuter = false;
 		}
-
 	}
-
-
 }
 
 /**
@@ -233,6 +225,7 @@ void slettRute() {
 void slett() {
 	gRuter.clear(); //Tømmer hele vektoren
 }
+
 /**
  * @brief  Sletter en spesifikk rute.
  * @param nr - Int indeks for brukerlagd bussrute
