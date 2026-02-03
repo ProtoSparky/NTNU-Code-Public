@@ -1,8 +1,17 @@
+/*****************************************************************//**
+ * @file   oblig1.cpp
+ * @brief  Program som gir mulighet for å lage eller slette bussruter
+ * 
+ * @author Sparky
+ * @date   2026-2-3
+ *********************************************************************/
+
+
 #include <iostream>
-#include <iomanip>
-#include <string>
+#include <iomanip>							//setw()
+#include <string>							//string()
 #include <vector>
-#include "lesdata2.h"
+#include "lesdata2.h"						//lesChar(), lesInt()
 using namespace std; 
 const int ANTSTOPP = 11;					///< Totalt antall ulike busstopp.
 struct Rute {
@@ -39,31 +48,15 @@ bool ruteLesData(Rute & rute);
 void slettRute();
 void slett(const int nr);
 void slett();
-/*
-Er det tomt for ruter, kommer en egen melding.I motsatt fall skrives alle rutene ut
-	(inkludert deres indekser fra 1 og oppover).Brukeren spørres så om hvilke(n) som skal slettes.
-	- 1 (minus 1) betyr alle, og da kalles void slett() som gjør dette.
-	0 (null)betyr ingen, og det kommer en egen melding, før funksjonen avsluttes.
-	1 og oppover betyr at den aktuelle ruten slettes.Til dette brukes funksjonen
-	void slett(const int nr) som flytter den bakerste i gRuter til den
-	slettedes plass(indeks).
-
-*/
-
-
 
 void skrivMeny() {
 	char input = '\0';
-	string ledetekst =
-		"Velg et valg\n"
-		"    N = Sett rute \n"
-		"    S = Slett rute\n"
-		"    A = Skriv ut alle ruter \n"
-		"    B = Skriv ut alle busstopp\n"
-		"Input"; 
-
+	cout << "Velg et valg\n";
+	cout << "   " << "N = Sett rute\n" << "   " << "S = Slett rute\n"
+		<< "   " << "A = Skriv ut alle ruter \n" << "   "
+		<< "B = Skriv ut alle busstopp\n"; 
 	while (input != 'Q') {
-		input = lesChar("test");
+		input = lesChar("Input");
 		if (input == 'N') {
 			//Ny rute
 			nyRute(); 
@@ -87,7 +80,7 @@ void skrivMeny() {
 
 
 /**
- * @brief  Skriver navnent på alle lagrede stoppesteder fra 1 og oppover.
+ * @brief UI - Skriver navnent på alle lagrede stoppesteder fra 1 og oppover.
  */
 void skrivStopp() {
 	cout << "Nr: | Stoppnavn \n";
@@ -98,23 +91,10 @@ void skrivStopp() {
 }
 
 
-/*
-Leser rutens reelle nummer(trenger ikke å sjekke at andre allerede har dette rutenummeret).		X
-Alle mulige stoppesteder skrives ut på skjermen.	X
-Det første som leses blir da rutens startsted.		X
-Leser så indeksen for neste lovlige stoppested(bruk tidligere nevnt funksjon), ut fra
-nåværende stoppested, inntil brukeren velger ‘0’(null).		X
-
-Navnet på stoppestedene legges kontinuerlig til bakerst i rutens stopp.		X
-Dens totMin oppdateres også hele tiden.Er det
-mer enn ett stoppested på ruten, returneres true ellers false.Du trenger ikke å sjekke for
-duplikate forekomster av stoppesteder.
-*/
-
 
 /**
- * @brief Lar bruker sette sammen ruter.
- * @param rute
+ * @brief UI - Lar bruker sette sammen ruter.
+ * @param rute struct
  * @return true/false basert på om det er mer enn 1 stopp som lagres
  */
 bool ruteLesData(Rute& rute) {
@@ -132,7 +112,7 @@ bool ruteLesData(Rute& rute) {
 
 	do {
 		skrivNesteStoppesteder(startStedNr - 1);
-		stedNr = lesInt("Velg neste stoppested. '0' for avslutt. ", 0, ANTSTOPP);
+		stedNr =lesInt("Velg neste stoppested. '0' for avslutt. ", 0, ANTSTOPP);
 		if (stedNr == 0) {
 			avslutt = true; 
 		}
@@ -142,7 +122,8 @@ bool ruteLesData(Rute& rute) {
 				rute.totMin += gMinutter[startStedNr - 1][stedNr - 1];
 			}
 			else {
-				cout << "\nStoppet du valgte kan ikke naas fra startstoppet ditt\n";
+				cout << "\nStoppet du valgte kan ikke" 
+				<< "naas fra startstoppet ditt\n";
 			}
 		}
 	} while (!avslutt);
@@ -152,39 +133,12 @@ bool ruteLesData(Rute& rute) {
 	}
 	return false; // return false hvis stoppesteder mindre enn 2
 
-
-
-
-	/*
-	do {
-		minutter = 0;
-
-		do {
-			skrivNesteStoppesteder(startStedNr - 1);
-			stedNr = lesInt("Velg neste stoppested. '0' for avslutt. ", 0, ANTSTOPP);
-			if (stedNr == 0) { avslutt = true; }
-
-			minutter = gMinutter[startStedNr][stedNr - 1];
-			if (minutter == 0 && !avslutt)
-			{
-				cout << "Stoppet du valgte kan ikke nås fra startstoppet ditt\n";
-			}
-		} while (minutter == 0 && !avslutt);
-
-		//lagre data
-		rute.stopp.push_back(gBusstopp[stedNr -1]);
-		rute.totMin += gMinutter[startStedNr-1][stedNr -1];
-
-	} while (stedNr != 0);
-	rute.ruteNr = ruteNr;
-
-	*/
 }
 
 
 /**
  * @brief Skriver lovlige stoppeseder ut fra stopp nr .
- * @param stopp
+ * @param stopp - int for busstopp indeks
  */
 void skrivNesteStoppesteder(const int stopp) {
 	const vector valgtLinje = gMinutter[stopp]; 
@@ -198,27 +152,40 @@ void skrivNesteStoppesteder(const int stopp) {
 	cout << "\n------------------------\n";
 }
 
-/* Oppretter en ny rute.Får alle dennes data lest inn vha.funksjonen nedenfor.	X
-Gikk innlesningen bra, så legges den inn bakerst i gRuter,	X
-
-og dens indeks(husk vi nummerere fra 1) skrives ut sammen med alle dens data(jfr.ruteSkrivData(…)), ellers slettes ruten*/
+/**
+ * @brief UI - Spør bruker om div info for å lage en ny rute.
+ */
 void nyRute() {
 	Rute* nyRute = new Rute;
 	if (ruteLesData(*nyRute)) {
 		gRuter.push_back(nyRute);
 		cout << "Indeks | Rute Nummer | Total reisetid(min) | Alle busstopp \n";
-		cout << setw(6) << gRuter.capacity() << " | "; 
+		cout << setw(6) << gRuter.size() << " | "; 
 		ruteSkrivData(*nyRute); 
 	}
 
 }
 
+/**
+ * @brief  UI - Skriver alle ruter lagret i systemet.
+ */
+void skrivRuter() {
+	cout << "Indeks | Rute Nummer | Total reisetid(min) | Alle busstopp \n";
+	for (int i = 0; i < gRuter.size(); i++) {
+		cout << setw(6) << i + 1 << " | ";
+		ruteSkrivData(*gRuter[i]);
+	}
 
+}
+/**
+ * @brief Skriver ut all info om ruten som ble lagret, og dens indeks.
+ * @param rute - Struct
+ */
 void ruteSkrivData(const Rute rute) {
 	cout << setw(11) << rute.ruteNr << " | " << setw(19) << rute.totMin << " | ";
-	for (int i = 0; i < rute.stopp.capacity(); i++) {
+	for (int i = 0; i < rute.stopp.size(); i++) {
 		cout << rute.stopp[i];
-		if (i < rute.stopp.capacity()-1) {
+		if (i < rute.stopp.size()-1) {
 			cout << "-- > "; 
 		}
 	}
@@ -226,53 +193,63 @@ void ruteSkrivData(const Rute rute) {
 	
 }
 
-void skrivRuter() {
-	//skriver alle ruter
-	cout << "Indeks | Rute Nummer | Total reisetid(min) | Alle busstopp \n";
-	for (int i = 0; i < gRuter.capacity(); i++) {
-		cout << setw(6) << i + 1 << " | ";
-		ruteSkrivData(*gRuter[i]);
-	}
-
-}
-
-
-
+/**
+ * @brief UI for sletting av ruter.
+ */
 void slettRute() {
+	bool harRuter = true; 
 	if (gRuter.empty()) {
 		cout << "Ingen ruter lagret\n";
-	}
-	skrivRuter();
-	cout << "\n";
-	int brukerValg = lesInt("Skriv inn rute index, 0 for ingen, -1 for alle", -1, gRuter.capacity());
-	if (brukerValg == -1) {
-		//slett alle
-	}
-	else if (brukerValg == 0) {
-		cout << "Ingenting slettet. Går tilbake til hovedmeny \n"; 
-	}
-	else {
-		//slett spesifikk 
+		harRuter = false;
 	}
 
+	while (harRuter) {
+		skrivRuter();
+		cout << "\n";
+		int brukerValg = lesInt("Skriv inn rute index, 0 for ingen, -1 for alle", -1, gRuter.size());
+		if (brukerValg == -1) {
+			//slett alle
+			slett();
+			harRuter = false;
+		}
+		else if (brukerValg == 0) {
+			cout << "Går tilbake til hovedmeny \n";
+			harRuter = false; 
+		}
+		else {
+			//slett spesifikk 
+			slett(brukerValg - 1); 
+			harRuter = false;
+		}
+
+	}
 
 
 }
-/*
-Er det tomt for ruter, kommer en egen melding.
-I motsatt fall skrives alle rutene ut	(inkludert deres indekser fra 1 og oppover).
-brukeren spørres så om hvilke(n) som skal slettes.	- 1 (minus 1) betyr alle, og da kalles void slett() som gjør dette.
-	0 (null)betyr ingen, og det kommer en egen melding, før funksjonen avsluttes.
-	1 og oppover betyr at den aktuelle ruten slettes.Til dette brukes funksjonen
-	void slett(const int nr) som flytter den bakerste i gRuter til den
-	slettedes plass(indeks).
 
-*/
+/**
+ * @brief  Sletter alle ruter.
+ */
+void slett() {
+	gRuter.clear(); //Tømmer hele vektoren
+}
+/**
+ * @brief  Sletter en spesifikk rute.
+ * @param nr - Int indeks for brukerlagd bussrute
+ */
+void slett(const int nr) {
+	delete gRuter[nr];
+	gRuter.erase(gRuter.begin() + nr);
+}
 
-
+/**
+ * @brief Startpunktet til progrmmet.
+ * @return 0
+ */
 int main()
 {
 	skrivMeny();
+	return 0; 
 }
 
 
