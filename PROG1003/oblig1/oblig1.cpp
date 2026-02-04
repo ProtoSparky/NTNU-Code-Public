@@ -1,6 +1,6 @@
-/*****************************************************************//**
+ï»¿/*****************************************************************//**
  * @file   oblig1.cpp
- * @brief  Program som gir mulighet for å lage eller slette bussruter
+ * @brief  Program som gir mulighet for Ã¥ lage eller slette bussruter
  * 
  * @author Kristupas Kaupas
  * @date   2026-2-3
@@ -17,21 +17,21 @@ const int ANTSTOPP = 11;					///< Totalt antall ulike busstopp.
 struct Rute {
 	vector <string> stopp;					// Rutens ulike stoppesteder.
 	int ruteNr,								// Reelt rutenr, f.eks. 42, 165, 718
-		totMin;								// Totalt antall minutter å kjøre på ruten
-};											// (fra første til siste stoppested).
+		totMin;								// Totalt antall minutter Ã¥ kjÃ¸re pÃ¥ ruten
+};											// (fra fÃ¥rste til siste stoppested).
 vector <Rute*> gRuter;						///< Pekere til rutene.
-const vector <string> gBusstopp =			///< Navn på alle busstopp.
+const vector <string> gBusstopp =			///< Navn pÃ¥ alle busstopp.
 { "Skysstasjonen", "Fahlstroms plass", "Sykehuset",
 "Gjovik stadion", "Bergslia", "Overby", "Nybrua",
 "NTNU", "Kallerud", "Hunndalen", "Mustad fabrikker" };
 //const int gMinutter[ANTSTOPP][ANTSTOPP] = ///< Min.mellom stoppesteder.
-const vector <vector <int> > gMinutter = // Alternativt (nå lært i vår).
+const vector <vector <int> > gMinutter = // Alternativt (nÃ¥ lÃ¦rt i vÃ¥r).
 { { 0, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // Skysstasjonen = 0
-{ 3, 0, 3, 0, 0, 0, 3, 0, 0, 0, 4}, // Fahlstrøms plass = 1
+{ 3, 0, 3, 0, 0, 0, 3, 0, 0, 0, 4}, // FahlstrÃ¥ms plass = 1
 { 0, 3, 0, 1, 0, 0, 0, 0, 0, 0, 0}, // Sykehuset = 2
-{ 0, 0, 1, 0, 3, 0, 0, 0, 0, 0, 0}, // Gjøvik stadion = 3
+{ 0, 0, 1, 0, 3, 0, 0, 0, 0, 0, 0}, // GjÃ¥vik stadion = 3
 { 0, 0, 0, 3, 0, 2, 0, 0, 0, 0, 0}, // Bergslia = 4
-{ 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0}, // Øverby = 5
+{ 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0}, // Ã¥verby = 5
 { 0, 3, 0, 0, 0, 0, 0, 2, 0, 0, 2}, // Nybrua = 6
 { 0, 0, 0, 0, 0, 0, 2, 0, 0, 4, 0}, // NTNU = 7
 { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // Kallerud = 8
@@ -62,7 +62,7 @@ void skrivMeny() {
 };
 
 /**
- * @brief UI - Skriver navnent på alle lagrede stoppesteder fra 1 og oppover.
+ * @brief UI - Skriver navnent pÃ¥ alle lagrede stoppesteder fra 1 og oppover.
  */
 void skrivStopp() {
 	cout << "Nr: | Stoppnavn \n";
@@ -75,7 +75,7 @@ void skrivStopp() {
 /**
  * @brief UI - Lar bruker sette sammen ruter.
  * @param rute struct
- * @return true/false basert på om det er mer enn 1 stopp som lagres
+ * @return true/false basert pÃ¥ om det er mer enn 1 stopp som lagres
  */
 bool ruteLesData(Rute& rute) {
 	cout << "\n";												  //konsoll pynt
@@ -90,7 +90,7 @@ bool ruteLesData(Rute& rute) {
 	skrivStopp();
 	startStedNr = lesInt("Start sted" , 1, ANTSTOPP);
 
-	rute.stopp.push_back(gBusstopp[startStedNr - 1]); //lagrer første stoppested
+	rute.stopp.push_back(gBusstopp[startStedNr - 1]); //lagrer fÃ¥rste stoppested
 
 	do {
 		skrivNesteStoppesteder(startStedNr - 1);
@@ -101,14 +101,14 @@ bool ruteLesData(Rute& rute) {
 		}
 		else {
 			if (gMinutter[startStedNr - 1][stedNr - 1] != 0) {
-						//sjekker om reisetid ikke er 0 altså at den kan nås fra 
+						//sjekker om reisetid ikke er 0 altsÃ¥ at den kan nÃ¥s fra 
 						//	startstopp. 
-						// Legger til stopp string i struct og plusser på totmin
+						// Legger til stopp string i struct og plusser pÃ¥ totmin
 				rute.stopp.push_back(gBusstopp[stedNr - 1]);
 				rute.totMin += gMinutter[startStedNr - 1][stedNr - 1];
 			}
 			else {
-							  //reisetid er null - Kan ikke nås fra startstoppet
+							  //reisetid er null - Kan ikke nÃ¥s fra startstoppet
 				cout << "\nStoppet du valgte kan ikke" 
 				<< "naas fra startstoppet ditt\n";
 			}
@@ -133,7 +133,7 @@ void skrivNesteStoppesteder(const int stopp) {
 	cout << "------------------------\n";
 	for (int i = 0; i < valgtLinje.size(); i++) {
 		if (valgtLinje[i] != 0) {
-							   //skriver ut alle linjer som nås fra stopp indeks 
+							   //skriver ut alle linjer som nÃ¥s fra stopp indeks 
 							   // (reisetid ikke null)
 			cout << setw(3) << i + 1 << " | " << gBusstopp[i] << "\n";
 		}
@@ -142,7 +142,7 @@ void skrivNesteStoppesteder(const int stopp) {
 }
 
 /**
- * @brief UI - Spør bruker om div info for å lage en ny rute.
+ * @brief UI - SpÃ¥r bruker om div info for Ã¥ lage en ny rute.
  */
 void nyRute() {
 	Rute* nyRute = new Rute;
@@ -190,12 +190,12 @@ void ruteSkrivData(const Rute rute) {
  * @brief UI for sletting av ruter.
  */
 void slettRute() {								
-	//Orginat så var denne funksjonen satt opp slik at den ikke ville
+	//Orginat sÃ¥ var denne funksjonen satt opp slik at den ikke ville
 	// printe menyvalget "Skriv inn rute index..." + den tomme rute tabellen
 	// om det var ingen ruter lagret i systemet.
-	//Jeg har selv valgt å korte ned koden og ha det som kompromiss ettersom
-	// jeg tolket at det ikke var nødvendig utifra oppgave teksten. 
-	//Si ifra om jeg har forstått det feil. 
+	//Jeg har selv valgt Ã¥ korte ned koden og ha det som kompromiss ettersom
+	// jeg tolket at det ikke var nÃ¥dvendig utifra oppgave teksten. 
+	//Si ifra om jeg har forstÃ¥tt det feil. 
 	if (gRuter.empty()) {
 		cout << "Ingen ruter lagret\n";
 	}
@@ -209,7 +209,7 @@ void slettRute() {
 		slett();											//sletter alle ruter
 	}
 	else if (brukerValg == 0) {
-		cout << "Går tilbake til hovedmeny \n";
+		cout << "GÃ¥r tilbake til hovedmeny \n";
 	}
 	else {												
 		slett(brukerValg - 1);							  //slett spesifikk rute 
@@ -220,7 +220,7 @@ void slettRute() {
  * @brief  Sletter alle ruter.
  */
 void slett() {
-	gRuter.clear();										  //Tømmer hele vektoren
+	gRuter.clear();										  //TÃ¥mmer hele vektoren
 }
 
 /**
@@ -229,7 +229,7 @@ void slett() {
  */
 void slett(const int nr) {
 	delete gRuter[nr];									//sletter verdien for nr
-	gRuter.erase(gRuter.begin() + nr);					//Tømmer pointer for nr 
+	gRuter.erase(gRuter.begin() + nr);					//TÃ¥mmer pointer for nr 
 }
 
 /**
