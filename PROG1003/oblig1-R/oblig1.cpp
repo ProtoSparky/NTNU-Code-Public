@@ -80,39 +80,77 @@ int main() {
 	return 0;
 }
 
-
-
 /**
- * UI - Menyvalg tekst i konsollen.
- * 
- * @see main() 
- */
-void skrivMeny() {
-	cout << "\nVelg et valg\n";
-	cout << "   " << "N = Sett rute\n"
-		 << "   " << "S = Slett rute\n"
-		 << "   " << "A = Skriv ut alle ruter \n"
-		 << "   " << "B = Skriv ut alle busstopp\n"
-		 << "   " << "Q = Avslutt\n\n";
-};
-
-/**
- * UI - Skriver navnent på alle lagrede stoppesteder fra 1 og oppover.
- * 
- * @see ruteLesData()
+ * UI - Spår bruker om div info for å lage en ny rute.
+ *
  * @see main()
  */
-void skrivStopp() {
-	cout << "Nr: | Stoppnavn \n";
-	cout << "----------------\n";
-	for (int i = 0; i < ANTSTOPP; i++) {
-		cout << setw(3)<<i + 1 << " | " << gBusstopp[i] << "\n"; 
+void nyRute() {
+	Rute* nyRute = new Rute;
+	if (ruteLesData(*nyRute)) {
+		//Lagrer nuRute i gRuter hvis der var mer enn 1 rute i ruteLesData()
+		gRuter.push_back(nyRute);
+		cout << "Lagret data vises under: \n";
+		cout << "Indeks | Rute Nummer | Total reisetid(min) | Alle busstopp \n";
+		cout << setw(6) << gRuter.size() << " | ";
+		ruteSkrivData(*nyRute);
 	}
 }
 
 /**
+ * UI - Lar bruker sette sammen ruter.
+ *
+ * @param rute struct
+ * @return true/false basert på om det er mer enn 1 stopp som lagres
+ * @see nyRute()
+ */
+bool ruteLesData(Rute& rute) {
+	cout << "\n";												  //konsoll pynt
+
+	rute.ruteNr = lesInt("Skriv inn rute nummer ", 0, 1000);	 //lagrer rutenr
+	int startStedNr, stedNr;			  //startsted og neste stopp sted indeks
+	bool avslutt = false;
+	rute.totMin = 0;							//initialiserer for senere bruk
+
+	cout << "Velg nr for startssted\n";
+	skrivStopp();
+	startStedNr = lesInt("Start sted", 1, ANTSTOPP);
+
+	rute.stopp.push_back(gBusstopp[startStedNr - 1]); //lagrer fårste stoppested
+
+	do {
+		skrivNesteStoppesteder(startStedNr - 1);
+		stedNr = lesInt("Velg neste stoppested. '0' for avslutt. ", 0, ANTSTOPP);
+		if (stedNr == 0) {
+			//programmet avsluttes pga 0 som input
+			avslutt = true;
+		}
+		else {
+			if (gMinutter[startStedNr - 1][stedNr - 1] != 0) {
+				//sjekker om reisetid ikke er 0 altså at den kan nås fra 
+				//	startstopp. 
+				// Legger til stopp string i struct og plusser på totmin
+				rute.stopp.push_back(gBusstopp[stedNr - 1]);
+				rute.totMin += gMinutter[startStedNr - 1][stedNr - 1];
+			}
+			else {
+				//reisetid er null - Kan ikke nås fra startstoppet
+				cout << "\nStoppet du valgte kan ikke"
+					<< "naas fra startstoppet ditt\n";
+			}
+		}
+	} while (!avslutt);
+
+	if (rute.stopp.size() > 1) {
+		return true;
+	}
+	return false;				  // return false hvis stoppesteder mindre enn 2
+
+}
+
+/**
  * Skriver ut all info om ruten som ble lagret, og dens indeks.
- * 
+ *
  * @param rute - Struct
  * @see skrivRuter()
  * @see nyRute()
@@ -132,23 +170,22 @@ void ruteSkrivData(const Rute rute) {
 
 
 /**
- * UI - Skriver alle ruter lagret i systemet.
+ * UI - Menyvalg tekst i konsollen.
  * 
- * @see slettRuter()
- * @see main()
+ * @see main() 
  */
-void skrivRuter() {
-	cout << "Indeks | Rute Nummer | Total reisetid(min) | Alle busstopp \n";
-	for (int i = 0; i < gRuter.size(); i++) {
-		cout << setw(6) << i + 1 << " | ";
-		ruteSkrivData(*gRuter[i]);
-	}
-
-}
+void skrivMeny() {
+	cout << "\nVelg et valg\n";
+	cout << "   " << "N = Sett rute\n"
+		 << "   " << "S = Slett rute\n"
+		 << "   " << "A = Skriv ut alle ruter \n"
+		 << "   " << "B = Skriv ut alle busstopp\n"
+		 << "   " << "Q = Avslutt\n\n";
+};
 
 /**
  * Skriver lovlige stoppeseder ut fra stopp nr.
- * 
+ *
  * @param stopp - int for busstopp indeks
  * @see ruteLesData()
  */
@@ -168,71 +205,56 @@ void skrivNesteStoppesteder(const int stopp) {
 }
 
 /**
- * UI - Spår bruker om div info for å lage en ny rute.
- * 
+ * UI - Skriver alle ruter lagret i systemet.
+ *
+ * @see slettRuter()
  * @see main()
  */
-void nyRute() {
-	Rute* nyRute = new Rute;
-	if (ruteLesData(*nyRute)) {
-		//Lagrer nuRute i gRuter hvis der var mer enn 1 rute i ruteLesData()
-		gRuter.push_back(nyRute);
-		cout << "Lagret data vises under: \n";
-		cout << "Indeks | Rute Nummer | Total reisetid(min) | Alle busstopp \n";
-		cout << setw(6) << gRuter.size() << " | ";
-		ruteSkrivData(*nyRute);
+void skrivRuter() {
+	cout << "Indeks | Rute Nummer | Total reisetid(min) | Alle busstopp \n";
+	for (int i = 0; i < gRuter.size(); i++) {
+		cout << setw(6) << i + 1 << " | ";
+		ruteSkrivData(*gRuter[i]);
+	}
+
+}
+
+/**
+ * UI - Skriver navnent på alle lagrede stoppesteder fra 1 og oppover.
+ * 
+ * @see ruteLesData()
+ * @see main()
+ */
+void skrivStopp() {
+	cout << "Nr: | Stoppnavn \n";
+	cout << "----------------\n";
+	for (int i = 0; i < ANTSTOPP; i++) {
+		cout << setw(3)<<i + 1 << " | " << gBusstopp[i] << "\n"; 
 	}
 }
 
 /**
- * UI - Lar bruker sette sammen ruter.
- * 
- * @param rute struct
- * @return true/false basert på om det er mer enn 1 stopp som lagres
- * @see nyRute()
+ * Sletter alle ruter.
+ *
+ * @see slettRute()
  */
-bool ruteLesData(Rute& rute) {
-	cout << "\n";												  //konsoll pynt
-
-	int ruteNr = lesInt("Skriv inn rute nummer ", 0, 1000);
-	int startStedNr, stedNr;			  //startsted og neste stopp sted indeks
-	bool avslutt = false;
-	rute.ruteNr = ruteNr;						//lagrer rutenr
-	rute.totMin = 0;							//initialiserer for senere bruk
-
-	cout << "Velg nr for startssted\n";
-	skrivStopp();
-	startStedNr = lesInt("Start sted" , 1, ANTSTOPP);
-
-	rute.stopp.push_back(gBusstopp[startStedNr - 1]); //lagrer fårste stoppested
-
-	do {
-		skrivNesteStoppesteder(startStedNr - 1);
-		stedNr =lesInt("Velg neste stoppested. '0' for avslutt. ", 0, ANTSTOPP);
-		if (stedNr == 0) {
-										  //programmet avsluttes pga 0 som input
-			avslutt = true; 
-		}
-		else {
-			if (gMinutter[startStedNr - 1][stedNr - 1] != 0) {
-						//sjekker om reisetid ikke er 0 altså at den kan nås fra 
-						//	startstopp. 
-						// Legger til stopp string i struct og plusser på totmin
-				rute.stopp.push_back(gBusstopp[stedNr - 1]);
-				rute.totMin += gMinutter[startStedNr - 1][stedNr - 1];
-			}
-			else {
-							  //reisetid er null - Kan ikke nås fra startstoppet
-				cout << "\nStoppet du valgte kan ikke" 
-				<< "naas fra startstoppet ditt\n";
-			}
-		}
-	} while (!avslutt);
-	
-	if (rute.stopp.size() > 1) {
-		return true;
+void slett() {
+	for (int i = 0; i < gRuter.capacity(); i++) {
+		delete gRuter[i];					   //Fjerner data pointers peker til
 	}
-	return false;				  // return false hvis stoppesteder mindre enn 2
+	gRuter.clear();										  //Tømmer hele vektoren
+}
+
+/**
+ * Sletter en spesifikk rute.
+ *
+ * @param nr - Int indeks for brukerlagd bussrute
+ * @see slettRute
+ */
+void slett(const int nr) {
+	delete gRuter[nr];									//sletter verdien for nr
+	swap(gRuter[nr], gRuter.back()); //Bytter plass på bakerst og ønsket element
+	gRuter.pop_back();								   //Sletter bakerst element 
 
 }
 
@@ -262,22 +284,3 @@ void slettRute() {
 	}	
 }
 
-/**
- * Sletter alle ruter.
- * 
- * @see slettRute()
- */
-void slett() {
-	gRuter.clear();										  //Tømmer hele vektoren
-}
-
-/**
- * Sletter en spesifikk rute.
- * 
- * @param nr - Int indeks for brukerlagd bussrute
- * @see slettRute
- */
-void slett(const int nr) {
-	delete gRuter[nr];									//sletter verdien for nr
-	gRuter.erase(gRuter.begin() + nr);					//Tømmer pointer for nr 
-}
