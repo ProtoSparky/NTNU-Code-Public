@@ -165,7 +165,7 @@ void Aktivitet::skrivData() const {
  */
 void Tidsbegrenset::lesData() {
 
-	//  Lag innmaten
+	
 }
 
 
@@ -241,8 +241,16 @@ Dag :: ~Dag() {
  */
 bool Dag::harDato(const int dag, const int maaned, const int aar) const {
 
-	//  Lag innmaten
-	return false; //temporary
+	if (
+		(dag == dagNr) &&
+		(maaned == maanedNr) &&
+		(aar == aarNr)
+		)
+	{
+		return true;
+	}
+	return false; 
+
 }
 
 
@@ -253,17 +261,26 @@ bool Dag::harDato(const int dag, const int maaned, const int aar) const {
  *  @see   Heldags::lesData()
  */
 void Dag::nyAktivitet() {
-
-	//  Skriver først ut alle lagrede datoer SkrivDager()
-	skrivDager(false); 
-
-	//leses inn en lovlig dato dagOK()
-
-	//Sjekker om dag er lagret. Dag* finnDag()
-
-	//hvis ikke, opprettes en ny Dag, og den legges bakerst i aktuell vector
-
-	//Leses det inn en ny aktivitet på denne (allerede eksisterende eller nyopprettede) dagen
+	char input;	
+	bool run = true; 
+	while (run) {
+		cout << "Velg aktivitetstype:\n" <<
+			"\tT - Tidsbegrenset aktivitet\n" <<
+			"\tH - Heldags aktivitet";
+		input = lesChar("input: ");
+		if (input == 'T') {
+			run = false;
+			Tidsbegrenset nyAktivitet;
+			nyAktivitet.lesData();
+		}
+		else if (input == 'H') {
+			run = false;
+			Heldags nyAktivitet;
+			nyAktivitet.lesData();
+		}
+		
+	}
+	
 }
 
 
@@ -323,9 +340,13 @@ bool dagOK(const int dag, const int maaned, const int aar) {
  *  @see     harDato(...)
  */
 Dag* finnDag(const int dag, const int maaned, const int aar) {
-
-	//  Lag innmaten
-	return 0; //temporary
+	for (int i = 0; i < gDagene.size(); i++) {
+		if (gDagene[i]->harDato(dag, maaned, aar)) {
+			return gDagene[i];
+		}
+	}
+	return nullptr; //ingen dager funnet med lik dato	
+	
 }
 
 
@@ -348,7 +369,33 @@ void frigiAllokertMemory() {
  */
 void nyAktivitet() {
 
-	//  Lag innmaten
+	int dag, maaned, aar;
+	Dag* dagPtr; 
+	//  Skriver først ut alle lagrede datoer SkrivDager()
+	skrivDager(false);
+
+	//leses inn en lovlig dato dagOK()
+	dag = lesInt("skriv inn dag ", 0, 31);
+	maaned = lesInt("Skriv inn måned ", 0, 12);
+	aar = lesInt("Skriv inn år ", 1990, 2030);
+	if (dagOK(dag, maaned, aar)) { //vil alltid gi true pga lesint
+		dagPtr = finnDag(dag, maaned, aar); 
+		if (dagPtr == nullptr) {
+			//opprett ny dag med dato
+			Dag nydag(dag, maaned, aar); 
+			gDagene.push_back(&nydag); //lagrer nydag
+			dagPtr = &nydag; 
+		}
+
+		//leses inn ny aktivitet
+		
+		dagPtr->nyAktivitet(); 
+	}
+
+
+	//hvis ikke, opprettes en ny Dag, og den legges bakerst i aktuell vector
+
+	//Leses det inn en ny aktivitet på denne (allerede eksisterende eller nyopprettede) dagen
 }
 
 
@@ -362,7 +409,7 @@ void nyAktivitet() {
 void skrivDager(const bool inkludertAktiviteter) {
 	int size = gDagene.size();
 	if (size == 0) {
-		cout << "Det er ingen dager lagret"; 
+		cout << "Det er ingen dager lagret \n"; 
 	}
 	else {
 		cout << "Dag\n" << "-----\n";
