@@ -39,13 +39,13 @@ enum aktivitetsType { Jobb, Fritid, Skole, ikkeAngitt };
  *  Baseklassen 'Aktivitet' (med navn og aktivitetstype).
  */
 class Aktivitet {
-private:
-	string navn;
-	aktivitetsType kategori;
-public:
-	Aktivitet() { navn = ""; kategori = ikkeAngitt; }
-	void lesData();
-	void skrivData() const;
+	private:
+		string navn;
+		aktivitetsType kategori;
+	public:
+		Aktivitet() { navn = ""; kategori = ikkeAngitt; }
+		void lesData();
+		void skrivData() const;
 };
 
 
@@ -53,13 +53,13 @@ public:
  *  Subklassen 'Tidsbegrenset' (med tidspunkter for start/stopp av aktivitet).
  */
 class Tidsbegrenset : public Aktivitet {
-private:
-	int  startTime, startMin, sluttTime, sluttMin;
-	bool klokkeslettOK(const int time, const int minutt) const;
-public:
-	Tidsbegrenset() { sluttMin = sluttTime = startTime = startMin = 0; };
-	void lesData();
-	void skrivData() const;
+	private:
+		int  startTime, startMin, sluttTime, sluttMin;
+		bool klokkeslettOK(const int time, const int minutt) const;
+	public:
+		Tidsbegrenset() { sluttMin = sluttTime = startTime = startMin = 0; };
+		void lesData();
+		void skrivData() const;
 };
 
 
@@ -67,12 +67,12 @@ public:
  *  Subklassen 'Heldags' (med nærmere beskrivelse av aktiviteten).
  */
 class Heldags : public Aktivitet {
-private:
-	string beskrivelse;
-public:
-	Heldags() { beskrivelse = ""; };
-	void lesData();
-	void skrivData() const;
+	private:
+		string beskrivelse;
+	public:
+		Heldags() { beskrivelse = ""; };
+		void lesData();
+		void skrivData() const;
 };
 
 
@@ -80,22 +80,22 @@ public:
  *  Selvlaget container-klasse 'Dag' (med dato og ulike aktiviteter).
  */
 class Dag {
-private:
-	int dagNr, maanedNr, aarNr;
-	vector <Tidsbegrenset*> tidsbegrensedeAktiviteter;
-	vector <Heldags*> heldagsAktiviteter;
+	private:
+		int dagNr, maanedNr, aarNr;
+		vector <Tidsbegrenset*> tidsbegrensedeAktiviteter;
+		vector <Heldags*> heldagsAktiviteter;
 
-public:
-	//    Dag()  {  };
-	Dag(const int dag, const int maaned, const int aar) {
-		dagNr = dag;  maanedNr = maaned;  aarNr = aar;
-	};
-	~Dag();
-	bool harDato(const int dag, const int maaned, const int aar) const;
-	void nyAktivitet();
-	void skrivAktiviteter() const;
-	void skrivDato() const;
-};
+	public:
+		//    Dag()  {  };
+		Dag(const int dag, const int maaned, const int aar) {
+			dagNr = dag;  maanedNr = maaned;  aarNr = aar;
+		};
+		~Dag();
+		bool harDato(const int dag, const int maaned, const int aar) const;
+		void nyAktivitet();
+		void skrivAktiviteter() const;
+		void skrivDato() const;
+}; 
 
 
 bool dagOK(const int dag, const int maaned, const int aar);
@@ -178,7 +178,14 @@ void Tidsbegrenset::lesData() {
  */
 bool Tidsbegrenset::klokkeslettOK(const int time, const int minutt) const {
 
-	//  Lag innmaten
+	if (
+		(time >= 0 && time <= 23) &&
+		(minutt >= 0 && minutt <= 59)
+		)
+	{
+		return true;
+	}
+	return false; 
 }
 
 
@@ -235,6 +242,7 @@ Dag :: ~Dag() {
 bool Dag::harDato(const int dag, const int maaned, const int aar) const {
 
 	//  Lag innmaten
+	return false; //temporary
 }
 
 
@@ -246,7 +254,16 @@ bool Dag::harDato(const int dag, const int maaned, const int aar) const {
  */
 void Dag::nyAktivitet() {
 
-	//  Lag innmaten
+	//  Skriver først ut alle lagrede datoer SkrivDager()
+	skrivDager(false); 
+
+	//leses inn en lovlig dato dagOK()
+
+	//Sjekker om dag er lagret. Dag* finnDag()
+
+	//hvis ikke, opprettes en ny Dag, og den legges bakerst i aktuell vector
+
+	//Leses det inn en ny aktivitet på denne (allerede eksisterende eller nyopprettede) dagen
 }
 
 
@@ -265,9 +282,8 @@ void Dag::skrivAktiviteter() const {
 /**
  *  Skriver KUN ut egen dato.
  */
-void Dag::skrivDato() const {
-
-	//  Lag innmaten
+void Dag::skrivDato() const {	
+	cout << "-" << dagNr << "-" << maanedNr << "-" << aarNr;
 }
 
 
@@ -284,8 +300,16 @@ void Dag::skrivDato() const {
  *  @return  Om datoen er lovlig/OK eller ei
  */
 bool dagOK(const int dag, const int maaned, const int aar) {
-
-	//  Lag innmaten
+	if (
+		(dag >= 1 && dag <= 31 ) && 
+		(maaned >= 1 && maaned <= 12) && 
+		(aar >= 1990 && aar <= 2030)
+		) 
+	{
+		return true;
+	}
+	return false; 
+	
 }
 
 
@@ -301,6 +325,7 @@ bool dagOK(const int dag, const int maaned, const int aar) {
 Dag* finnDag(const int dag, const int maaned, const int aar) {
 
 	//  Lag innmaten
+	return 0; //temporary
 }
 
 
@@ -335,8 +360,19 @@ void nyAktivitet() {
  *  @see     Dag::skrivAktiviteter()
  */
 void skrivDager(const bool inkludertAktiviteter) {
+	int size = gDagene.size();
+	if (size == 0) {
+		cout << "Det er ingen dager lagret"; 
+	}
+	else {
+		cout << "Dag\n" << "-----\n";
+		for (int i = 0; i < size; i++) {
+			gDagene[i]->skrivDato(); 
+			if (inkludertAktiviteter) { gDagene[i]->skrivAktiviteter();}
+			cout << "\n"; 
+		}
+	}
 
-	//  Lag innmaten
 }
 
 
