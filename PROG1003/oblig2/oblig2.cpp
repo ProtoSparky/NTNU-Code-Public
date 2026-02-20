@@ -105,6 +105,7 @@ void nyAktivitet();
 void skrivDager(const bool inkludertAktiviteter);
 void skrivEnDag();
 void skrivMeny();
+void padSiffer(int tall);
 
 
 vector <Dag*> gDagene;           ///<  Dager med aktiviteter
@@ -143,8 +144,28 @@ int main() {
  *  Leser inn ALLE klassens data.
  */
 void Aktivitet::lesData() {
+	int aktivitetInput;
+	cout << "Skriv inn navn på aktivitet: \n";
+	getline(cin, navn);
 
-	//  Lag innmaten
+	cout << "Skriv inn aktivitet\n";
+	cout << "0 - Jobb \n1 - Fritid\n2 - Skole\n3 - Ikke angitt\n"; 
+	aktivitetInput = lesInt("Velg aktivitet", 0, 3);
+	switch(aktivitetInput){
+		case 0:
+			kategori = Jobb;
+			break;
+		case 1:
+			kategori = Fritid;
+			break;
+		case 2:
+			kategori = Skole;
+			break;
+		case 3:
+			kategori = ikkeAngitt;
+			break;
+	}	
+	
 }
 
 
@@ -152,8 +173,23 @@ void Aktivitet::lesData() {
  *  Skriver ut ALLE klassens data.
  */
 void Aktivitet::skrivData() const {
-
-	//  Lag innmaten
+	cout << "Navn | Kategori \n";
+	cout << navn << " | ";
+	switch(kategori){
+		case 0: 
+			cout << "Jobb";
+			break;
+		case 1:
+			cout << "Fritid";
+			break;
+		case 2:
+			cout << "Skole";
+			break;
+		case 3: 
+			cout << "Ikke angitt";
+			break; 
+	}
+	cout << "\n";
 }
 
 
@@ -164,8 +200,39 @@ void Aktivitet::skrivData() const {
  *  @see   klokkeslettOK(...)
  */
 void Tidsbegrenset::lesData() {
+	int inputStartTime, inputStartMin, inputSluttTime, inputSluttMin;
+	int startTotalMin, sluttTotalMin;
+	bool fortsett = true;
 
-	
+	Aktivitet nyAktivitet;
+	nyAktivitet.lesData();
+	while (fortsett) {
+		cout << "Skriv inn starttidspunkt: \n";
+		inputStartTime = lesInt("Skriv inn time ", 0, 23);
+		inputStartMin = lesInt("Skriv inn mintt ", 0, 59);
+		if (klokkeslettOK(inputStartTime, inputStartMin)) {
+			cout << "Klokkeslett er ok. \n";
+		}
+
+		inputSluttTime = lesInt("Skriv inn time ", 0, 23);
+		inputSluttMin = lesInt("Skriv inn minutt ", 0, 59);
+		if (klokkeslettOK(inputSluttTime, inputSluttMin)) {
+			cout << "Klokkeslet er ok \n";
+		}
+
+		startTotalMin = (inputStartTime * 60) + inputStartMin;
+		sluttTotalMin = (inputSluttTime * 60) + inputSluttMin;
+		if (startTotalMin < sluttTotalMin) {
+			//lagre data
+			startTime = inputStartTime; startMin = inputStartMin; 
+			sluttTime = inputSluttTime; sluttMin = inputSluttMin;
+
+			fortsett = false; 
+		}
+		else {
+			cout << "Start tidspunktet kan ikke være før slutt tidspunktet! \n"; 
+		}
+	}	
 }
 
 
@@ -177,7 +244,6 @@ void Tidsbegrenset::lesData() {
  *  @return  Om parametrene er et lovlig klokkeslett eller ei
  */
 bool Tidsbegrenset::klokkeslettOK(const int time, const int minutt) const {
-
 	if (
 		(time >= 0 && time <= 23) &&
 		(minutt >= 0 && minutt <= 59)
@@ -193,10 +259,15 @@ bool Tidsbegrenset::klokkeslettOK(const int time, const int minutt) const {
  *  Skriver ut ALLE klassens data, inkludert morklassens data.
  *
  *  @see   Aktivitet::skrivData()
+ *  @see   padSiffer()
  */
 void Tidsbegrenset::skrivData() const {         //  Skriver mor-klassens data.
+	Aktivitet nyAktivitet;
+	nyAktivitet.skrivData(); 
 
-	//  Lag innmaten
+	padSiffer(startTime); cout << ":"; padSiffer(startMin); cout << "-";
+	padSiffer(sluttTime); cout << ":"; padSiffer(sluttMin); cout << "\n"; 
+	
 }
 
 
@@ -206,8 +277,10 @@ void Tidsbegrenset::skrivData() const {         //  Skriver mor-klassens data.
  *  @see   Aktivitet::lesData()
  */
 void Heldags::lesData() {
-
-	//  Lag innmaten
+	Aktivitet nyAktivitet;
+	nyAktivitet.lesData();
+	cout << "Skriv inn en beskrivelse på aktiviteten: \n";
+	getline(cin, beskrivelse); 
 }
 
 
@@ -217,8 +290,10 @@ void Heldags::lesData() {
  *  @see   Aktivitet::skrivData()
  */
 void Heldags::skrivData() const {
+	Aktivitet nyAktivitet;
+	nyAktivitet.skrivData();
 
-	//  Lag innmaten
+	cout << "Beskrivelse: " << beskrivelse <<"\n";
 }
 
 
@@ -291,8 +366,17 @@ void Dag::nyAktivitet() {
  *  @see   Tidsbegrenset::skrivData()
  */
 void Dag::skrivAktiviteter() const {
+	cout << "------------ Tidsbegrensede aktiviteter ------------\n"; 
+	for (int i = 0; i < tidsbegrensedeAktiviteter.size(); i++) {
+		tidsbegrensedeAktiviteter[i]->skrivData();
+	}
+	cout << "\n"; 
+	cout << "------------ Heldags aktiviteter ------------ \n";
 
-	//  Lag innmaten
+	for (int i = 0; i < heldagsAktiviteter.size(); i++) {
+		heldagsAktiviteter[i]->skrivData(); 
+	}
+	
 }
 
 
@@ -391,11 +475,6 @@ void nyAktivitet() {
 		
 		dagPtr->nyAktivitet(); 
 	}
-
-
-	//hvis ikke, opprettes en ny Dag, og den legges bakerst i aktuell vector
-
-	//Leses det inn en ny aktivitet på denne (allerede eksisterende eller nyopprettede) dagen
 }
 
 
@@ -432,8 +511,24 @@ void skrivDager(const bool inkludertAktiviteter) {
  *  @see   Dag::skrivAktiviteter()
  */
 void skrivEnDag() {
+	int dag, maaned, aar; 
+	Dag* dagPtr;
+	skrivDager(false); 
+	//leses inn en lovlig dato dagOK()
+	dag = lesInt("skriv inn dag ", 0, 31);
+	maaned = lesInt("Skriv inn måned ", 0, 12);
+	aar = lesInt("Skriv inn år ", 1990, 2030);
+	if (dagOK(dag, maaned, aar)) { //vil alltid gi true pga lesint
+		dagPtr = finnDag(dag, maaned, aar);
+		if (dagPtr != nullptr) {
+			//Skriv ut info for dagen
 
-	//  Lag innmaten
+		}
+		else {
+			cout << "Dagen finnes ikke! \n"; 
+		}
+	}
+
 }
 
 
@@ -446,4 +541,18 @@ void skrivMeny() {
 		<< "\tA - skriv ut Alle dager med aktiviteter\n"
 		<< "\tS - Skriv EN gitt dag og (alle) dens aktiviteter\n"
 		<< "\tQ - Quit / avslutt\n";
+}
+
+
+/**
+ * Skriver ut ensifrete tall med 0 foran.
+ * @param tall
+ */
+void padSiffer(int tall){
+	if (tall < 10) {
+		cout << "0" << tall;
+	}
+	else {
+		cout << tall;
+	}
 }
