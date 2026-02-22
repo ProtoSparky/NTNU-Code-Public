@@ -1,6 +1,4 @@
 ﻿/**
- *  Skjelett for obligatorisk oppgave nr 2 i PROG1003 - OOP.
- *
  *  Programmet er en kalender der man kan legge inn heldags og
  *  tidsbegrensede aktiviteter på spesifikke dager.
  *
@@ -18,7 +16,7 @@
  *      med hver sine ulike aktiviteter.
  *
  *  @file OBLIG2.CPP
- *  @author Malin Foss, William Eide Seiner og Frode Haug, NTNU
+ *  @author Kristupas Kaupas
  */
 
 
@@ -102,10 +100,10 @@ bool dagOK(const int dag, const int maaned, const int aar);
 Dag* finnDag(const int dag, const int maaned, const int aar);
 void frigiAllokertMemory();
 void nyAktivitet();
+void padSiffer(int tall);
 void skrivDager(const bool inkludertAktiviteter);
 void skrivEnDag();
 void skrivMeny();
-void padSiffer(int tall);
 
 
 vector <Dag*> gDagene;           ///<  Dager med aktiviteter
@@ -145,9 +143,8 @@ int main() {
  */
 void Aktivitet::lesData() {
 	int aktivitetInput;
-	cout << "Skriv inn navn på aktivitet: \n";
+	cout << "Skriv inn navn paa aktivitet \ninput: ";
 	getline(cin, navn);
-
 	cout << "Skriv inn aktivitet\n";
 	cout << "0 - Jobb \n1 - Fritid\n2 - Skole\n3 - Ikke angitt\n"; 
 	aktivitetInput = lesInt("Velg aktivitet", 0, 3);
@@ -202,24 +199,25 @@ void Aktivitet::skrivData() const {
 void Tidsbegrenset::lesData() {
 	int inputStartTime, inputStartMin, inputSluttTime, inputSluttMin;
 	int startTotalMin, sluttTotalMin;
-	bool fortsett = true;
+	bool fortsett = true;								//flag for å stoppe loop
 
-	Aktivitet nyAktivitet;
-	nyAktivitet.lesData();
+	Aktivitet::lesData();
 	while (fortsett) {
 		cout << "Skriv inn starttidspunkt: \n";
 		inputStartTime = lesInt("Skriv inn time ", 0, 23);
 		inputStartMin = lesInt("Skriv inn mintt ", 0, 59);
-		if (klokkeslettOK(inputStartTime, inputStartMin)) {
+		if (klokkeslettOK(inputStartTime, inputStartMin)) {//Vil alltid være true
 			cout << "Klokkeslett er ok. \n";
 		}
-
+		
+		cout << "SKriv inn slutt tidspunkt: \n"; 
 		inputSluttTime = lesInt("Skriv inn time ", 0, 23);
 		inputSluttMin = lesInt("Skriv inn minutt ", 0, 59);
-		if (klokkeslettOK(inputSluttTime, inputSluttMin)) {
+		if (klokkeslettOK(inputSluttTime, inputSluttMin)) {//Vil alltid være true
 			cout << "Klokkeslet er ok \n";
 		}
-
+											 //Gjør om til min for å 
+											 // sammennligne start og slutt tid
 		startTotalMin = (inputStartTime * 60) + inputStartMin;
 		sluttTotalMin = (inputSluttTime * 60) + inputSluttMin;
 		if (startTotalMin < sluttTotalMin) {
@@ -227,7 +225,7 @@ void Tidsbegrenset::lesData() {
 			startTime = inputStartTime; startMin = inputStartMin; 
 			sluttTime = inputSluttTime; sluttMin = inputSluttMin;
 
-			fortsett = false; 
+			fortsett = false;			   //Stopper while loop om alt var greit
 		}
 		else {
 			cout << "Start tidspunktet kan ikke være før slutt tidspunktet! \n"; 
@@ -259,12 +257,12 @@ bool Tidsbegrenset::klokkeslettOK(const int time, const int minutt) const {
  *  Skriver ut ALLE klassens data, inkludert morklassens data.
  *
  *  @see   Aktivitet::skrivData()
- *  @see   padSiffer()
+ *  @see   padSiffer(...)
  */
 void Tidsbegrenset::skrivData() const {         //  Skriver mor-klassens data.
-	Aktivitet nyAktivitet;
-	nyAktivitet.skrivData(); 
-
+	Aktivitet::skrivData(); 
+												//skriver ut data med null 
+												// foran om det er ensifret tall
 	padSiffer(startTime); cout << ":"; padSiffer(startMin); cout << "-";
 	padSiffer(sluttTime); cout << ":"; padSiffer(sluttMin); cout << "\n"; 
 	
@@ -277,9 +275,8 @@ void Tidsbegrenset::skrivData() const {         //  Skriver mor-klassens data.
  *  @see   Aktivitet::lesData()
  */
 void Heldags::lesData() {
-	Aktivitet nyAktivitet;
-	nyAktivitet.lesData();
-	cout << "Skriv inn en beskrivelse på aktiviteten: \n";
+	Aktivitet::lesData();
+	cout << "Skriv inn en beskrivelse paa aktiviteten: \n";
 	getline(cin, beskrivelse); 
 }
 
@@ -290,9 +287,7 @@ void Heldags::lesData() {
  *  @see   Aktivitet::skrivData()
  */
 void Heldags::skrivData() const {
-	Aktivitet nyAktivitet;
-	nyAktivitet.skrivData();
-
+	Aktivitet::skrivData();
 	cout << "Beskrivelse: " << beskrivelse <<"\n";
 }
 
@@ -301,8 +296,12 @@ void Heldags::skrivData() const {
  *  Destructor som sletter HELT begge vectorenes allokerte innhold.
  */
 Dag :: ~Dag() {
-
-	//  Lag innmaten
+	for (Tidsbegrenset* aktivitet : tidsbegrensedeAktiviteter) {
+		delete aktivitet; 
+	}
+	for (Heldags* aktivitet : heldagsAktiviteter) {
+		delete aktivitet; 
+	}
 }
 
 
@@ -315,7 +314,6 @@ Dag :: ~Dag() {
  *  @return  Om selv er en gitt dato (ut fra parametrene) eller ei
  */
 bool Dag::harDato(const int dag, const int maaned, const int aar) const {
-
 	if (
 		(dag == dagNr) &&
 		(maaned == maanedNr) &&
@@ -325,7 +323,6 @@ bool Dag::harDato(const int dag, const int maaned, const int aar) const {
 		return true;
 	}
 	return false; 
-
 }
 
 
@@ -337,21 +334,24 @@ bool Dag::harDato(const int dag, const int maaned, const int aar) const {
  */
 void Dag::nyAktivitet() {
 	char input;	
-	bool run = true; 
+	bool run = true;									//flag for å stoppe loop
 	while (run) {
 		cout << "Velg aktivitetstype:\n" <<
 			"\tT - Tidsbegrenset aktivitet\n" <<
-			"\tH - Heldags aktivitet";
-		input = lesChar("input: ");
+			"\tH - Heldags aktivitet\n";
+		input = lesChar("input");
+
 		if (input == 'T') {
 			run = false;
-			Tidsbegrenset nyAktivitet;
-			nyAktivitet.lesData();
+			Tidsbegrenset*  nyAktivitet = new Tidsbegrenset();
+			nyAktivitet ->lesData();
+			tidsbegrensedeAktiviteter.push_back(nyAktivitet); 
 		}
 		else if (input == 'H') {
 			run = false;
-			Heldags nyAktivitet;
-			nyAktivitet.lesData();
+			Heldags* nyAktivitet = new Heldags();
+			nyAktivitet->lesData();
+			heldagsAktiviteter.push_back(nyAktivitet); 
 		}
 		
 	}
@@ -366,7 +366,7 @@ void Dag::nyAktivitet() {
  *  @see   Tidsbegrenset::skrivData()
  */
 void Dag::skrivAktiviteter() const {
-	cout << "------------ Tidsbegrensede aktiviteter ------------\n"; 
+	cout << "\n------------ Tidsbegrensede aktiviteter ------------\n"; 
 	for (int i = 0; i < tidsbegrensedeAktiviteter.size(); i++) {
 		tidsbegrensedeAktiviteter[i]->skrivData();
 	}
@@ -384,7 +384,7 @@ void Dag::skrivAktiviteter() const {
  *  Skriver KUN ut egen dato.
  */
 void Dag::skrivDato() const {	
-	cout << "-" << dagNr << "-" << maanedNr << "-" << aarNr;
+	cout << dagNr << "-" << maanedNr << "-" << aarNr;
 }
 
 
@@ -426,11 +426,10 @@ bool dagOK(const int dag, const int maaned, const int aar) {
 Dag* finnDag(const int dag, const int maaned, const int aar) {
 	for (int i = 0; i < gDagene.size(); i++) {
 		if (gDagene[i]->harDato(dag, maaned, aar)) {
-			return gDagene[i];
+			return gDagene[i];				//return av funnet poiunter
 		}
 	}
-	return nullptr; //ingen dager funnet med lik dato	
-	
+	return nullptr;							//ingen dager funnet med lik dato		
 }
 
 
@@ -438,8 +437,10 @@ Dag* finnDag(const int dag, const int maaned, const int aar) {
  *  Frigir/sletter ALLE dagene og ALLE pekerne i 'gDagene'.
  */
 void frigiAllokertMemory() {
-
-	//  Lag innmaten
+	for (Dag* dag : gDagene) {
+		delete dag;							//sletter dataen pointers peker til
+	}
+	gDagene.clear(); 						//tømmer hele vektoren
 }
 
 
@@ -452,31 +453,37 @@ void frigiAllokertMemory() {
  *  @see   Dag::nyAktivitet()
  */
 void nyAktivitet() {
-
 	int dag, maaned, aar;
 	Dag* dagPtr; 
-	//  Skriver først ut alle lagrede datoer SkrivDager()
-	skrivDager(false);
+	skrivDager(false);		 //Skriver først ut alle lagrede datoer SkrivDager()
 
-	//leses inn en lovlig dato dagOK()
 	dag = lesInt("skriv inn dag ", 0, 31);
-	maaned = lesInt("Skriv inn måned ", 0, 12);
-	aar = lesInt("Skriv inn år ", 1990, 2030);
-	if (dagOK(dag, maaned, aar)) { //vil alltid gi true pga lesint
+	maaned = lesInt("Skriv inn maaned ", 0, 12);
+	aar = lesInt("Skriv inn aar ", 1990, 2030);
+	if (dagOK(dag, maaned, aar)) {				//vil alltid gi true pga lesint
 		dagPtr = finnDag(dag, maaned, aar); 
-		if (dagPtr == nullptr) {
-			//opprett ny dag med dato
-			Dag nydag(dag, maaned, aar); 
-			gDagene.push_back(&nydag); //lagrer nydag
-			dagPtr = &nydag; 
+		if (dagPtr == nullptr) {					   //opprett ny dag med dato
+			Dag* nydag = new Dag(dag, maaned, aar);	   //allokerer ny memory
+			gDagene.push_back(nydag);				   //lagrer nydag
+			dagPtr = nydag;	//gir pointer til ny dag hvis den ikke eksisterte
 		}
-
-		//leses inn ny aktivitet
-		
-		dagPtr->nyAktivitet(); 
+	
+		dagPtr->nyAktivitet();							//leses inn ny aktivitet	
 	}
 }
 
+/**
+ * Skriver ut ensifrete tall med 0 foran.
+ * @param tall
+ */
+void padSiffer(int tall) {
+	if (tall < 10) {
+		cout << "0" << tall;
+	}
+	else {
+		cout << tall;
+	}
+}
 
 /**
  *  Skriver ut ALLE dagene (MED eller UTEN deres aktiviteter).
@@ -485,14 +492,15 @@ void nyAktivitet() {
  *  @see     Dag::skrivDato()
  *  @see     Dag::skrivAktiviteter()
  */
-void skrivDager(const bool inkludertAktiviteter) {
+void skrivDager(const bool inkludertAktiviteter) { 
 	int size = gDagene.size();
 	if (size == 0) {
 		cout << "Det er ingen dager lagret \n"; 
 	}
 	else {
-		cout << "Dag\n" << "-----\n";
+		cout << "Dag\n" << "----------\n";
 		for (int i = 0; i < size; i++) {
+			cout << "\n"; 
 			gDagene[i]->skrivDato(); 
 			if (inkludertAktiviteter) { gDagene[i]->skrivAktiviteter();}
 			cout << "\n"; 
@@ -513,16 +521,16 @@ void skrivDager(const bool inkludertAktiviteter) {
 void skrivEnDag() {
 	int dag, maaned, aar; 
 	Dag* dagPtr;
-	skrivDager(false); 
-	//leses inn en lovlig dato dagOK()
+	skrivDager(false);					//skrivr ut alle dager uten aktiviteter
+										//leses inn en lovlig dato dagOK()
 	dag = lesInt("skriv inn dag ", 0, 31);
-	maaned = lesInt("Skriv inn måned ", 0, 12);
-	aar = lesInt("Skriv inn år ", 1990, 2030);
-	if (dagOK(dag, maaned, aar)) { //vil alltid gi true pga lesint
+	maaned = lesInt("Skriv inn maaned ", 0, 12);
+	aar = lesInt("Skriv inn aar ", 1990, 2030);
+	if (dagOK(dag, maaned, aar)) {		//vil alltid gi true pga lesint
 		dagPtr = finnDag(dag, maaned, aar);
-		if (dagPtr != nullptr) {
-			//Skriv ut info for dagen
-
+		if (dagPtr != nullptr) {		//Skriv ut info for dagen
+			dagPtr->skrivDato();
+			dagPtr->skrivAktiviteter(); 
 		}
 		else {
 			cout << "Dagen finnes ikke! \n"; 
@@ -541,18 +549,4 @@ void skrivMeny() {
 		<< "\tA - skriv ut Alle dager med aktiviteter\n"
 		<< "\tS - Skriv EN gitt dag og (alle) dens aktiviteter\n"
 		<< "\tQ - Quit / avslutt\n";
-}
-
-
-/**
- * Skriver ut ensifrete tall med 0 foran.
- * @param tall
- */
-void padSiffer(int tall){
-	if (tall < 10) {
-		cout << "0" << tall;
-	}
-	else {
-		cout << tall;
-	}
 }
