@@ -299,9 +299,13 @@ Dag :: ~Dag() {
 	for (Tidsbegrenset* aktivitet : tidsbegrensedeAktiviteter) {
 		delete aktivitet; 
 	}
+	
 	for (Heldags* aktivitet : heldagsAktiviteter) {
 		delete aktivitet; 
 	}
+												//tømmer selve pointer vektorene
+	tidsbegrensedeAktiviteter.clear();
+	heldagsAktiviteter.clear(); 
 }
 
 
@@ -474,6 +478,7 @@ void nyAktivitet() {
 
 /**
  * Skriver ut ensifrete tall med 0 foran.
+ * 
  * @param tall
  */
 void padSiffer(int tall) {
