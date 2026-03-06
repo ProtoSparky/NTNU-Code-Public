@@ -1,0 +1,22 @@
+﻿ISBIL
+Stavanger				Isbil.sted
+3						Isbil.iskremSortiment.capacity()
+
+SORBET					Iskrem.Sorbet
+Jordbær					Iskrem.smak
+35						Iskrem.pris
+Granite					Iskrem.Sorbet.type
+
+FLOTEIS					Iskrem.Floteis
+Vanilje					Iskrem.smak
+55						Iskrem.pris
+1						Iskrem.Floteis.vegan
+
+SORBET
+Sitron					Iskrem.smak
+15						Iskrem.pris
+Slush					Iskrem.Sorbet.type
+
+ISBIL
+Oslo					Isbil.sted
+0						Isbil.IskremSortiment.capacity()

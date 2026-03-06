@@ -1,10 +1,12 @@
 ﻿
 #include <iostream>
 #include <vector>
+#include "lesdata2.h";
+
 using namespace std; 
 
 enum sorbetTyper {Sorbe, Granite, Slush};
-
+const string FILPLASS = "./ISBIL.DTA"; 
 
 class Iskrem {
 	private:
@@ -66,6 +68,7 @@ class Isbil {
 		}
 		void skrivSted() {
 			//skriver ut [sted]
+			cout << "Bilen kjorer i '" << sted << "'/n"; 
 		}
 };
 
@@ -82,7 +85,25 @@ void lesFraFil();
 
 int main()
 {
-    
+	char cmd;
+	skrivMeny();
+	cmd = lesChar("");
+	while (cmd != 'Q') {
+		switch (cmd) {
+			case 'A':
+				skrivAlleIsbiler();
+				break;
+			case 'E':
+				skrivBilOgEvtLeggInn(false); 
+				break;
+			case 'L':
+				skrivBilOgEvtLeggInn(true);
+				break;
+		}
+	}
+	return 0;
+
+
 }
 
 
@@ -99,7 +120,7 @@ void skrivMeny() {
 		<< "	A - Vis alle isbiler\n"
 		<< "	E - sok etter isbil\n"
 		<< "	L - sok etter bil, og legg til iskrem\n"
-		<< "Ta ett valg:";
+		<< "Ta ett valg";
 }
 
 /*
