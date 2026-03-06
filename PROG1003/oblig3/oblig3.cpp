@@ -1,6 +1,7 @@
 ﻿
 #include <iostream>
 #include <vector>
+#include <string>
 #include "lesdata2.h";
 
 using namespace std; 
@@ -22,6 +23,8 @@ class Iskrem {
 		}
 		virtual void skrivData() {
 			//skriver data til skjerm
+			cout << smak << " | " << pris << " |";
+			
 		}
 		virtual void fyllUtIskrem() {
 			//fyller ut smak og pris
@@ -30,15 +33,37 @@ class Iskrem {
 };
 
 
-class Sorbet : Iskrem {
+class Sorbet : public Iskrem {
 	private: 
 		sorbetTyper type; 
+	public:
+		void skrivData() override {
+			string typeStr = "ukjent";			//Defaut verdi hvis noe feiler
+			switch (type) {
+			case 0:
+				typeStr = "Sorbe"; break;
+			case 1:
+				typeStr = "Granite"; break; 
+			case 2:
+				typeStr = "Slush"; break;
+			}
+			cout << "Sorbet (" << typeStr << ") | "; 
+			Iskrem::skrivData();
+			cout << "\n"; 
+		}
 };
 
-class Floteis : Iskrem {
+class Floteis : public Iskrem {
 	private:
 		bool vegan; 
-
+	public:
+		void skrivData() override {
+			string veganStr = "ukjent";			//Defaut verdi hvis noe feiler
+			if (vegan) { veganStr = "Vegan";}else { veganStr = "Ikke vegan";}
+			cout << "Floteis (" << veganStr << ") | ";
+			Iskrem::skrivData();
+			cout << "\n"; 
+		}
 };
 
 
@@ -47,29 +72,13 @@ class Isbil {
 		string sted;		
 		vector <Iskrem*> iskremSortiment; //pekere til alle [Iskrem] den har
 	public:
-		Isbil() {
-			//leser isbilens innhold fra fil
-		}
-		~Isbil() {
-			//sletter alle iskremene i bilens liste
-		}
-		void leggTilIskrem() {
-			//legger til ny iskrem i iskrem sortiment. Enten [Sorbet] eller [Floteis]
-		}
-		void skrivOppsummering() {
-			//skriver ut [sted] og størrelse på [iskremSortiment]
-		}
-		void skrivDetaljertOppsummering() {
-			//samme som skrivOppsummering
-			// skriver også ut all info om alle iskrem i [iskremsortiment]
-		}
-		void lagreBil() {
-			//lagrer all data som [Isbil] har
-		}
-		void skrivSted() {
-			//skriver ut [sted]
-			cout << "Bilen kjorer i '" << sted << "'/n"; 
-		}
+		Isbil();
+		~Isbil();
+		void leggTilIskrem();
+		void skrivOppsummering();
+		void skrivDetaljertOppsummering();
+		void lagreBil();
+		string returnSted();
 };
 
 vector <Isbil*> gIsbiler; //liste med alle isbiler
@@ -128,7 +137,10 @@ void skrivMeny() {
 	(ved å bruke funksjonen i 4d).
 */
 void skrivAlleIsbiler() {
-
+	for (int i = 0; i < gIsbiler.size(); i++) {
+		cout << "---------- Isbil " << i << " ----------\n";
+		gIsbiler[i]->skrivOppsummering(); 
+	}
 }
 
 
@@ -142,7 +154,13 @@ For begge funksjonene i pkt.7 og 8 kommer det en egen melding om det er helt tom
 
 */
 void skrivBilOgEvtLeggInn(const bool leggInn) {
+	string sted;
+	skrivAlleIsbiler();
 
+	getline(cin, sted); 
+	if (sted != "") {
+
+	}
 }
 
 /*
@@ -159,4 +177,67 @@ filen som i forrige punkt, og etter det selvvalgte formatet.
 */
 void lesFraFil(){
 
+}
+
+
+/**
+ * @brief  Skriver ut sted og størrelse på iskrem sortiment.
+ */
+void Isbil::skrivOppsummering(){
+	//skriver ut [sted] og størrelse på [iskremSortiment]
+	cout << "Bilen kjorer i '" << sted << "' med "
+		 << iskremSortiment.size() << " antall iskrem i lageret\n";
+}
+
+/**
+ * @brief Skriver ut oppsummering av all data for en gitt isbil.
+ */
+void Isbil::skrivDetaljertOppsummering() {
+	// skriver også ut all info om alle iskrem i [iskremsortiment]
+
+	cout << "Bilen kjorer i '" << sted << "' med "
+		<< iskremSortiment.size() << " antall iskrem i lageret\n";
+
+	cout << "Type | Smak | Pris |\n"
+		<< "----------------------\n";
+	
+	for (int i = 0; i < iskremSortiment.size(); i++) {
+		iskremSortiment[i]->skrivData();
+	}
+
+}
+
+/**
+ * @brief return av string sted for gitt isbil.
+ * @return sted
+ */
+string Isbil::returnSted() {
+	return sted; 
+}
+
+void Isbil::lagreBil() {
+	//lagrer all data som [Isbil] har
+}
+void Isbil::leggTilIskrem() {
+	//legger til ny iskrem i iskrem sortiment. Enten [Sorbet] eller [Floteis]
+}
+Isbil::~Isbil() {
+	//sletter alle iskremene i bilens liste
+}
+Isbil::Isbil() {
+	//leser isbilens innhold fra fil
+}
+
+/**
+ * @brief Finner isbil på gitt sted. Returner pointer til denne, eller nullptr.
+ * @param sted
+ * @return pointer til isbil
+ */
+Isbil* finnIsbil(string sted) {
+	for (int i = 0; i < gIsbiler.size(); i++) {
+		if (gIsbiler[i]->returnSted() == sted) {
+			return  gIsbiler[i]; 
+		}
+	}
+	return nullptr; 
 }
