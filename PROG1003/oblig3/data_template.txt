@@ -1,4 +1,7 @@
-﻿ISBIL
+﻿ANT_BILER
+2
+
+ISBIL
 Stavanger				Isbil.sted
 3						Isbil.iskremSortiment.capacity()
 

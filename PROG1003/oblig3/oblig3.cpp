@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <fstream>
 #include "lesdata2.h";
 
 using namespace std; 
@@ -128,6 +129,7 @@ void lesFraFil();
 
 
 int main(){
+	lesFraFil(); 
 	char cmd;
 	skrivMeny();
 	cmd = lesChar("");
@@ -204,7 +206,6 @@ void skrivBilOgEvtLeggInn(const bool leggInn) {
 		}
 	}
 
-
 }
 
 /*
@@ -220,7 +221,13 @@ Leser inn hele datastrukturen (bilene og deres iskremmer) fra samme
 filen som i forrige punkt, og etter det selvvalgte formatet.
 */
 void lesFraFil(){
+	string fileStream;
+	ifstream File (FILPLASS);
+	while (getline(File, fileStream)) {
+		cout << fileStream; 
+	}
 
+	
 }
 
 
@@ -261,6 +268,8 @@ string Isbil::returnSted() {
 
 void Isbil::lagreBil() {
 	//lagrer all data som [Isbil] har
+
+
 }
 void Isbil::leggTilIskrem() {
 	//legger til ny iskrem i iskrem sortiment. Enten [Sorbet] eller [Floteis]
