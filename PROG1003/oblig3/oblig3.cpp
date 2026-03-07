@@ -18,7 +18,7 @@ class Iskrem {
 		Iskrem() {
 			//leser iskrem innhold fra fil
 		}
-		virtual void lesData() {
+		virtual void hentData() {
 
 		}
 		virtual void skrivData() {
@@ -26,8 +26,13 @@ class Iskrem {
 			cout << smak << " | " << pris << " |";
 			
 		}
-		virtual void fyllUtIskrem() {
-			//fyller ut smak og pris
+		virtual void nyIskrem() {				
+			cout << "sett pris paa iskrem \n"; 
+			pris = lesInt("pris", 0, 999);
+
+			cout << "Sett smak paa iskremen \n\tsmak: ";
+			getline(cin, smak); 
+
 		}
 
 };
@@ -51,6 +56,23 @@ class Sorbet : public Iskrem {
 			Iskrem::skrivData();
 			cout << "\n"; 
 		}
+		void nyIskrem() override {
+			cout << "Velg sorbet type\n"
+				<< "\t (0) Sorbe\n"
+				<< "\t (1) Granite\n"
+				<< "\t (2) Slush\n";
+
+			switch (lesInt("Velg type", 0, 2)) {
+				case 0:
+					type = Sorbe; break;
+				case 1:
+					type = Granite; break;
+				case 2:
+					type = Slush; break;
+			}
+
+			Iskrem:nyIskrem(); 
+		}
 };
 
 class Floteis : public Iskrem {
@@ -63,6 +85,19 @@ class Floteis : public Iskrem {
 			cout << "Floteis (" << veganStr << ") | ";
 			Iskrem::skrivData();
 			cout << "\n"; 
+		}
+
+		void nyIskrem() override {
+			cout << "Er isen vegansk?"
+				<< "\t (0) - Nei\n"
+				<< "\t (1) - Ja\n";
+			switch (lesInt("valg", 0, 1)) {
+				case 0:
+					vegan = false; break;
+				case 1:
+					vegan = true; break; 
+			}
+			Iskrem:skrivData();
 		}
 };
 
@@ -92,8 +127,7 @@ void lesFraFil();
 
 
 
-int main()
-{
+int main(){
 	char cmd;
 	skrivMeny();
 	cmd = lesChar("");
@@ -137,6 +171,9 @@ void skrivMeny() {
 	(ved å bruke funksjonen i 4d).
 */
 void skrivAlleIsbiler() {
+	if (gIsbiler.size() == 0) {
+		cout << "Det er helt tomt for isbiler!\n"; 
+	}
 	for (int i = 0; i < gIsbiler.size(); i++) {
 		cout << "---------- Isbil " << i << " ----------\n";
 		gIsbiler[i]->skrivOppsummering(); 
@@ -145,22 +182,29 @@ void skrivAlleIsbiler() {
 
 
 
-/*
- – Kaller først
-funksjonen i pkt.7. Leser så et stedsnavn, inntil brukeren kun skriver ENTER (tom tekst) eller at
-stedet blir funnet (vha. funksjonen i pkt.11). Om stedet/bilen blir funnet, så skrives alle dens data vha.
-funksjonen i pkt.4e. Om i tillegg leggInn er true, så legges det inn en ny is i den aktuelle bilen.
-For begge funksjonene i pkt.7 og 8 kommer det en egen melding om det er helt tomt for isbiler.
-
-*/
+/**
+ * @brief Viser alle biler, lar bruker søke etter sted, og evt legge til iskrem.
+ * @param leggInn
+ */
 void skrivBilOgEvtLeggInn(const bool leggInn) {
 	string sted;
 	skrivAlleIsbiler();
+	if (gIsbiler.size() > 0) {
+		cout << "Velg sted a soke etter\nSted: "; 
+		getline(cin, sted);
 
-	getline(cin, sted); 
-	if (sted != "") {
+		if (sted != "") {
+			Isbil* ptr = finnIsbil(sted);
+			ptr->skrivDetaljertOppsummering();
 
+
+			if (leggInn && ptr != nullptr) {
+				ptr->leggTilIskrem();
+			}
+		}
 	}
+
+
 }
 
 /*
@@ -220,6 +264,19 @@ void Isbil::lagreBil() {
 }
 void Isbil::leggTilIskrem() {
 	//legger til ny iskrem i iskrem sortiment. Enten [Sorbet] eller [Floteis]
+	cout << "Velg type iskrem å legge til\n"
+		<< "\t (0) - Sorbet\n"
+		<< "\t (1) - Floteis\n";
+	switch (lesInt("Valg", 0, 1)) {
+		case 0:
+			Sorbet * nySorbet = new Sorbet; 
+			nySorbet->nyIskrem();
+			iskremSortiment.push_back(nySorbet); 
+		case 1:
+			Floteis * nyFloteis = new Floteis;
+			nyFloteis->nyIskrem();
+			iskremSortiment.push_back(nyFloteis); 
+	}
 }
 Isbil::~Isbil() {
 	//sletter alle iskremene i bilens liste
@@ -241,3 +298,5 @@ Isbil* finnIsbil(string sted) {
 	}
 	return nullptr; 
 }
+
+ 
