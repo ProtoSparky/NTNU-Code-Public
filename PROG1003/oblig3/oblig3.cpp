@@ -129,7 +129,9 @@ void lesFraFil();
 
 
 int main(){
+	
 	lesFraFil(); 
+
 	char cmd;
 	skrivMeny();
 	cmd = lesChar("");
@@ -182,12 +184,27 @@ void skrivAlleIsbiler() {
 	}
 }
 
+/**
+ * @brief Finner isbil på gitt sted. Returner pointer til denne, eller nullptr.
+ * @param sted
+ * @return pointer til isbil
+ */
+
+Isbil* finnIsbil(string sted) {
+	for (int i = 0; i < gIsbiler.size(); i++) {
+		if (gIsbiler[i]->returnSted() == sted) {
+			return  gIsbiler[i];
+		}
+	}
+	return nullptr;
+}
 
 
 /**
  * @brief Viser alle biler, lar bruker søke etter sted, og evt legge til iskrem.
  * @param leggInn
  */
+
 void skrivBilOgEvtLeggInn(const bool leggInn) {
 	string sted;
 	skrivAlleIsbiler();
@@ -196,6 +213,7 @@ void skrivBilOgEvtLeggInn(const bool leggInn) {
 		getline(cin, sted);
 
 		if (sted != "") {
+			
 			Isbil* ptr = finnIsbil(sted);
 			ptr->skrivDetaljertOppsummering();
 
@@ -221,10 +239,12 @@ Leser inn hele datastrukturen (bilene og deres iskremmer) fra samme
 filen som i forrige punkt, og etter det selvvalgte formatet.
 */
 void lesFraFil(){
+	
 	string fileStream;
 	ifstream File (FILPLASS);
+	File.seekg(3);
 	while (getline(File, fileStream)) {
-		cout << fileStream; 
+		cout << fileStream << "\n";
 	}
 
 	
@@ -271,20 +291,25 @@ void Isbil::lagreBil() {
 
 
 }
+
 void Isbil::leggTilIskrem() {
 	//legger til ny iskrem i iskrem sortiment. Enten [Sorbet] eller [Floteis]
 	cout << "Velg type iskrem å legge til\n"
 		<< "\t (0) - Sorbet\n"
 		<< "\t (1) - Floteis\n";
 	switch (lesInt("Valg", 0, 1)) {
-		case 0:
-			Sorbet * nySorbet = new Sorbet; 
+		case 0: {
+			Sorbet* nySorbet = new Sorbet;
 			nySorbet->nyIskrem();
-			iskremSortiment.push_back(nySorbet); 
-		case 1:
-			Floteis * nyFloteis = new Floteis;
+			iskremSortiment.push_back(nySorbet);
+			break;
+		}
+		case 1: {
+			Floteis* nyFloteis = new Floteis;
 			nyFloteis->nyIskrem();
-			iskremSortiment.push_back(nyFloteis); 
+			iskremSortiment.push_back(nyFloteis);
+			break;
+		}
 	}
 }
 Isbil::~Isbil() {
@@ -294,18 +319,3 @@ Isbil::Isbil() {
 	//leser isbilens innhold fra fil
 }
 
-/**
- * @brief Finner isbil på gitt sted. Returner pointer til denne, eller nullptr.
- * @param sted
- * @return pointer til isbil
- */
-Isbil* finnIsbil(string sted) {
-	for (int i = 0; i < gIsbiler.size(); i++) {
-		if (gIsbiler[i]->returnSted() == sted) {
-			return  gIsbiler[i]; 
-		}
-	}
-	return nullptr; 
-}
-
- 
