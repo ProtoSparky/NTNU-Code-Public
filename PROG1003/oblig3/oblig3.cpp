@@ -71,7 +71,6 @@ class Sorbet : public Iskrem {
 				case 2:
 					type = Slush; break;
 			}
-
 			Iskrem:nyIskrem(); 
 		}
 };
@@ -240,14 +239,17 @@ Leser inn hele datastrukturen (bilene og deres iskremmer) fra samme
 filen som i forrige punkt, og etter det selvvalgte formatet.
 */
 void lesFraFil(){
-	
-	string fileStream;
+	int counter;
 	ifstream File (FILPLASS);
-	File.seekg(3);
-	while (getline(File, fileStream)) {
-		cout << fileStream << "\n";
+	File.seekg(3); //Fjernet BOM
+
+	File >> counter; 
+	for (int i = 0; i < counter; i++) {
+
 	}
 
+
+	File.close(); 
 	
 }
 
