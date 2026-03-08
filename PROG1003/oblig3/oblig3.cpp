@@ -134,7 +134,7 @@ int main(){
 
 	char cmd;
 	skrivMeny();
-	cmd = lesChar("");
+	cmd = lesChar("valg");
 	while (cmd != 'Q') {
 		switch (cmd) {
 			case 'A':
@@ -147,6 +147,8 @@ int main(){
 				skrivBilOgEvtLeggInn(true);
 				break;
 		}
+		skrivMeny();
+		cmd = lesChar("valg");
 	}
 	return 0;
 
@@ -166,8 +168,7 @@ void skrivMeny() {
 	cout << "Meny: \n"
 		<< "	A - Vis alle isbiler\n"
 		<< "	E - sok etter isbil\n"
-		<< "	L - sok etter bil, og legg til iskrem\n"
-		<< "Ta ett valg";
+		<< "	L - sok etter bil, og legg til iskrem\n";
 }
 
 /*
