@@ -90,8 +90,8 @@ class Sorbet : public Iskrem {
 				<< "\t (0) Sorbe\n"
 				<< "\t (1) Granite\n"
 				<< "\t (2) Slush\n";
-
-			switch (lesInt("Velg type", 0, 2)) {
+			int i = lesInt("Velg type", 0, 2); 
+			switch (i) {
 				case 0:
 					type = Sorbe; break;
 				case 1:
@@ -99,7 +99,7 @@ class Sorbet : public Iskrem {
 				case 2:
 					type = Slush; break;
 			}
-			Iskrem:nyIskrem(); 
+			Iskrem::nyIskrem(); 
 		}
 };
 
@@ -123,7 +123,7 @@ class Floteis : public Iskrem {
 		}
 
 		void nyIskrem() override {
-			cout << "Er isen vegansk?"
+			cout << "Er isen vegansk?\n"
 				<< "\t (0) - Nei\n"
 				<< "\t (1) - Ja\n";
 			switch (lesInt("valg", 0, 1)) {
@@ -132,7 +132,7 @@ class Floteis : public Iskrem {
 				case 1:
 					vegan = true; break; 
 			}
-			Iskrem:skrivData();
+			Iskrem::nyIskrem();
 		}
 };
 
@@ -191,13 +191,9 @@ int main(){
 
 
 
-/*
- – skriver meny for valgene:
- * A - tilkaller funksjonen i pkt.7
- * E - tilkaller funksjonen i pkt.8 med parameteren lik false
- * L - tilkaller funksjonen i pkt.8 med parameteren lik true
-
-*/
+/**
+ * @brief  Skriver ut menyen som kjøres i main.
+ */
 void skrivMeny() {
 	cout << "Meny: \n"
 		<< "	A - Vis alle isbiler\n"
@@ -205,10 +201,10 @@ void skrivMeny() {
 		<< "	L - sok etter bil, og legg til iskrem\n";
 }
 
-/*
- – skriver ut alle hoveddataene om alle isbilene
-	(ved å bruke funksjonen i 4d).
-*/
+
+/**
+ * @brief  Skriver ut all hoveddata for alle isbiler.
+ */
 void skrivAlleIsbiler() {
 	if (gIsbiler.size() == 0) {
 		cout << "Det er helt tomt for isbiler!\n"; 
@@ -269,10 +265,10 @@ void skrivTilFil() {
 
 }
 
-/*
-Leser inn hele datastrukturen (bilene og deres iskremmer) fra samme
-filen som i forrige punkt, og etter det selvvalgte formatet.
-*/
+
+/**
+ * @brief  Leser direkte fra fil, og legger til alle isbilene.
+ */
 void lesFraFil(){
 	int counter;
 	ifstream File (FILPLASS);
@@ -330,7 +326,7 @@ void Isbil::lagreBil() {
 
 void Isbil::leggTilIskrem() {
 	//legger til ny iskrem i iskrem sortiment. Enten [Sorbet] eller [Floteis]
-	cout << "Velg type iskrem å legge til\n"
+	cout << "Velg type iskrem aa legge til\n"
 		<< "\t (0) - Sorbet\n"
 		<< "\t (1) - Floteis\n";
 	switch (lesInt("Valg", 0, 1)) {
@@ -348,11 +344,17 @@ void Isbil::leggTilIskrem() {
 		}
 	}
 }
+
 Isbil::~Isbil() {
 	//sletter alle iskremene i bilens liste
 }
+
+
+/**
+ * @brief Kjører funksjoner for å legge til sorbet eler fløteis.
+ * @param file
+ */
 Isbil::Isbil(ifstream & file) {
-	//leser isbilens innhold fra fil
 	string buffer;
 	file >> buffer; //Hopper over "ISBIL" 
 	file >> sted; 
