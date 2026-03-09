@@ -16,11 +16,20 @@ class Iskrem {
 		int pris; 
 
 	public:
-		Iskrem() {
+		Iskrem(ifstream & file) {
 			//leser iskrem innhold fra fil
-		}
-		virtual void hentData() {
+			string buffer; 
+			file >> smak; 
+			file >> pris;
 
+			cout << "pris " << pris << " Smak " << smak; //DEBUG
+		}
+		Iskrem() {
+
+		}
+
+		virtual void hentData() {
+			//leser inn fra bruker
 		}
 		virtual void skrivData() {
 			//skriver data til skjerm
@@ -43,6 +52,25 @@ class Sorbet : public Iskrem {
 	private: 
 		sorbetTyper type; 
 	public:
+		Sorbet(ifstream & file): Iskrem(file) {
+			string buffer;
+			file >> buffer;
+			if (buffer == "Granite") {
+				type = Granite;
+			}
+			else if (buffer == "Sorbe") {
+				type = Sorbe;
+			}
+			else if (buffer == "Slush") {
+				type = Slush; 
+			}
+			cout << " type " << buffer << "\n"; //DEBUG
+
+		}
+		Sorbet() {
+
+		}
+
 		void skrivData() override {
 			string typeStr = "ukjent";			//Defaut verdi hvis noe feiler
 			switch (type) {
@@ -79,6 +107,13 @@ class Floteis : public Iskrem {
 	private:
 		bool vegan; 
 	public:
+		Floteis(ifstream& file): Iskrem(file) {
+			file >> vegan; 
+			cout << " vegan " << vegan << "\n";  //DEBUG
+		}
+		Floteis() {
+
+		}
 		void skrivData() override {
 			string veganStr = "ukjent";			//Defaut verdi hvis noe feiler
 			if (vegan) { veganStr = "Vegan";}else { veganStr = "Ikke vegan";}
@@ -107,7 +142,7 @@ class Isbil {
 		string sted;		
 		vector <Iskrem*> iskremSortiment; //pekere til alle [Iskrem] den har
 	public:
-		Isbil();
+		Isbil(ifstream & file);
 		~Isbil();
 		void leggTilIskrem();
 		void skrivOppsummering();
@@ -242,15 +277,13 @@ void lesFraFil(){
 	int counter;
 	ifstream File (FILPLASS);
 	File.seekg(3); //Fjernet BOM
-
 	File >> counter; 
 	for (int i = 0; i < counter; i++) {
-
+		Isbil* nyIsbil = new Isbil(File);
+		gIsbiler.push_back(nyIsbil); 
 	}
 
-
-	File.close(); 
-	
+	File.close(); 	
 }
 
 
@@ -318,7 +351,27 @@ void Isbil::leggTilIskrem() {
 Isbil::~Isbil() {
 	//sletter alle iskremene i bilens liste
 }
-Isbil::Isbil() {
+Isbil::Isbil(ifstream & file) {
 	//leser isbilens innhold fra fil
-}
+	string buffer;
+	file >> buffer; //Hopper over "ISBIL" 
+	file >> sted; 
+	int counter;
+	file >> counter; //antall iskrem sortiment 
+	
+	for (int i = 0; i < counter; i++) {
+		//cout << "Lager " << i << "iskrem paa " << sted << "\n";
+		file >> buffer;
+		if (buffer == "SORBET") {
+			cout << " lager sorbet"; //DEBUG
+			Sorbet* nySorbet = new Sorbet(file);
+			iskremSortiment.push_back(nySorbet); 
+		}
+		else if (buffer == "FLOTEIS") {
+			cout << " lager floteis";//DEBUG
+			Floteis* nyFloteis = new Floteis(file);
+			iskremSortiment.push_back(nyFloteis);
+		}
+	}
 
+}
