@@ -2,6 +2,8 @@
  * @file   oblig3.cpp
  * @brief  Program som holder oversikt over isbiler og dems iskrem. 
  * 
+ * OBS!!! FILPLASS krever Windows 1252 text encoding UTEN BOM
+ * 
  * @author Kristupas Kaupas
  * @date   2026-3-9
  *********************************************************************/
@@ -12,8 +14,8 @@
 #include "lesdata2.h";		//Lesint
 using namespace std; 
 enum sorbetTyper {Sorbe, Granite, Slush};
-const string FILPLASS = "./ISBIL.DTA";	// Sted hvor programm lagrer data
-										//	på sin data på disk
+const string FILPLASS = "./ISBIL.DTA";	// Sted hvor program lagrer sin data
+										//	på disk
 
 class Iskrem {
 	private:
@@ -66,7 +68,8 @@ class Isbil {
 		string returnSted();
 };
 
-vector <Isbil*> gIsbiler; //liste med alle isbiler
+vector <Isbil*> gIsbiler;				//liste med alle isbiler
+
 void skrivMeny(); 
 void skrivAlleIsbiler(); 
 void skrivBilOgEvtLeggInn(const bool leggInn); 
@@ -74,9 +77,10 @@ void skrivTilFil();
 void lesFraFil(); 
 
 
-
-int main(){
-	
+/**
+ * Hovedprogrammet
+ */
+int main(){	
 	lesFraFil(); 
 
 	char cmd;
@@ -101,8 +105,6 @@ int main(){
 		cmd = lesChar("valg");
 	}
 	return 0;
-
-
 }
 
 
@@ -115,7 +117,8 @@ void skrivMeny() {
 		<< "\t A - Vis alle isbiler\n"
 		<< "\t E - sok etter isbil\n"
 		<< "\t L - sok etter bil, og legg til iskrem\n"
-		<< "\t S - Lagre alt i fil\n"; 
+		<< "\t S - Lagre alt i fil\n"
+		<< "\t Q - Lukk programm\n"; 
 }
 
 
@@ -164,11 +167,14 @@ void skrivBilOgEvtLeggInn(const bool leggInn) {
 		cout << "Velg sted a soke etter\nSted: "; 
 		getline(cin, sted);
 
-		if (sted != "") {
+		if (!sted.empty()) {
 			
+			//finner pointer og skriver detaljert oppsummering
 			Isbil* ptr = finnIsbil(sted);
-			ptr->skrivDetaljertOppsummering();
-
+			if (ptr != nullptr) {
+				ptr->skrivDetaljertOppsummering();
+			}
+			else { cout << "stedet finnes ikke\n";}
 
 			if (leggInn && ptr != nullptr) {
 				ptr->leggTilIskrem();
@@ -184,13 +190,14 @@ void skrivBilOgEvtLeggInn(const bool leggInn) {
  * @see Isbil::lagreBil
  */
 void skrivTilFil() {
-	ofstream file(FILPLASS);
+	ofstream file(FILPLASS);		 //lager output file stream for fillagring
 	file << gIsbiler.size() << "\n"; //Legger på ant isbiler på toppen av filen
 	for (int i = 0; i < gIsbiler.size(); i++) {
-		file << "ISBIL\n";
+		file << "ISBIL\n";			 //legger på isbil tag
 		gIsbiler[i]->lagreBil(file);
 	}
-	file.close();
+	file.close();					 //lukker filen så andre programmer kan
+									 // bruke den igjen
 }
 
 
@@ -199,14 +206,14 @@ void skrivTilFil() {
  */
 void lesFraFil(){
 	int counter;
-	ifstream file (FILPLASS);
+	ifstream file (FILPLASS);		 //Lager input file stream for fillagring
 	//file.seekg(3); //Fjernet BOM
-	file >> counter; 
+	file >> counter;				 //henter ant biler fra toppen av filen
 	for (int i = 0; i < counter; i++) {
 		Isbil* nyIsbil = new Isbil(file);
 		gIsbiler.push_back(nyIsbil);		//Lagrer isbil i den globale liseten
 	}
-	file.close(); 	
+	file.close(); 					//Lukker/frigjør filen
 }
 
 
@@ -223,13 +230,11 @@ void Isbil::skrivOppsummering(){
  * @see Iskrem::skrivData
  */
 void Isbil::skrivDetaljertOppsummering() {
-	// skriver også ut all info om alle iskrem i [iskremsortiment]
-
 	cout << "Bilen kjorer i '" << sted << "' med "
 		<< iskremSortiment.size() << " antall iskrem i lageret\n";
 
 	cout << "Type | Smak | Pris |\n"
-		<< "----------------------\n";
+		 << "----------------------\n";
 	
 	for (int i = 0; i < iskremSortiment.size(); i++) {
 		iskremSortiment[i]->skrivData();
@@ -265,7 +270,6 @@ void Isbil::lagreBil(ofstream & file) {
  * @see Floteis::nyIskrem
  */
 void Isbil::leggTilIskrem() {
-	//legger til ny iskrem i iskrem sortiment. Enten [Sorbet] eller [Floteis]
 	cout << "Velg type iskrem aa legge til\n"
 		<< "\t (0) - Sorbet\n"
 		<< "\t (1) - Floteis\n";
@@ -285,8 +289,14 @@ void Isbil::leggTilIskrem() {
 	}
 }
 
+/**
+ * @brief Destructor sletter alle iskrem i bilens liste.
+ */
 Isbil::~Isbil() {
-	//sletter alle iskremene i bilens liste
+	for (int i = 0; i < iskremSortiment.size(); i++) {
+		delete iskremSortiment[i];							//sletter pointers
+	}
+	iskremSortiment.clear();								//Tømmer lista
 }
 
 
@@ -296,13 +306,16 @@ Isbil::~Isbil() {
  */
 Isbil::Isbil(ifstream & file) {
 	string buffer;
-	file >> buffer; //Hopper over "ISBIL" 
-	file >> sted; 
+	file >> buffer;								//Hopper over "ISBIL" 
+	file >> sted;
 	int counter;
-	file >> counter; //antall iskrem sortiment 
+	file >> counter;							//antall iskrem sortiment 
 	
 	for (int i = 0; i < counter; i++) {
 		file >> buffer;
+												//Sjekker om filen har SORBET 
+												// eller FLOTEIS, og kjører 
+												// de riktige klassene
 		if (buffer == "SORBET") {
 			Sorbet* nySorbet = new Sorbet(file);
 			iskremSortiment.push_back(nySorbet); 
@@ -397,8 +410,7 @@ void Sorbet::nyIskrem(){
 		<< "\t (0) Sorbe\n"
 		<< "\t (1) Granite\n"
 		<< "\t (2) Slush\n";
-	int i = lesInt("Velg type", 0, 2);
-	switch (i) {
+	switch (lesInt("Velg type", 0, 2)) {
 		case 0:
 			type = Sorbe; break;
 		case 1:
