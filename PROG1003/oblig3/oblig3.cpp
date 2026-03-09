@@ -1,14 +1,19 @@
-﻿
+﻿/*****************************************************************//**
+ * @file   oblig3.cpp
+ * @brief  Program som holder oversikt over isbiler og dems iskrem. 
+ * 
+ * @author Kristupas Kaupas
+ * @date   2026-3-9
+ *********************************************************************/
 #include <iostream>
 #include <vector>
 #include <string>
-#include <fstream>
-#include "lesdata2.h";
-
+#include <fstream>			//ifstream, ofstream
+#include "lesdata2.h";		//Lesint
 using namespace std; 
-
 enum sorbetTyper {Sorbe, Granite, Slush};
-const string FILPLASS = "./ISBIL.DTA"; 
+const string FILPLASS = "./ISBIL.DTA";	// Sted hvor programm lagrer data
+										//	på sin data på disk
 
 class Iskrem {
 	private:
@@ -16,135 +21,34 @@ class Iskrem {
 		int pris; 
 
 	public:
-		Iskrem(ifstream & file) {
-			//leser iskrem innhold fra fil
-			file >> smak; 
-			file >> pris;
-		}
+		Iskrem(ifstream& file);
 		Iskrem() {}
-
-		virtual void lagreData(ofstream & file) {
-			file << smak << "\n";
-			file << pris << "\n";
-		}
-		virtual void skrivData() {
-			//skriver data til skjerm
-			cout << smak << " | " << pris << " |";
-			
-		}
-		virtual void nyIskrem() {				
-			cout << "sett pris paa iskrem \n"; 
-			pris = lesInt("pris", 0, 999);
-
-			cout << "Sett smak paa iskremen \n\tsmak: ";
-			getline(cin, smak); 
-
-		}
+		virtual void lagreData(ofstream& file);
+		virtual void skrivData();
+		virtual void nyIskrem();
 
 };
-
 
 class Sorbet : public Iskrem {
 	private: 
 		sorbetTyper type; 
 	public:
-		Sorbet(ifstream & file): Iskrem(file) {
-			string buffer;
-			file >> buffer;
-			if (buffer == "Granite") {
-				type = Granite;
-			}
-			else if (buffer == "Sorbe") {
-				type = Sorbe;
-			}
-			else if (buffer == "Slush") {
-				type = Slush; 
-			}
-
-		}
+		Sorbet(ifstream& file);
 		Sorbet() {}
-
-		void skrivData() override {
-			string typeStr = "ukjent";			//Defaut verdi hvis noe feiler
-			switch (type) {
-			case 0:
-				typeStr = "Sorbe"; break;
-			case 1:
-				typeStr = "Granite"; break; 
-			case 2:
-				typeStr = "Slush"; break;
-			}
-			cout << "Sorbet (" << typeStr << ") | "; 
-			Iskrem::skrivData();
-			cout << "\n"; 
-		}
-
-		void nyIskrem() override {
-			cout << "Velg sorbet type\n"
-				<< "\t (0) Sorbe\n"
-				<< "\t (1) Granite\n"
-				<< "\t (2) Slush\n";
-			int i = lesInt("Velg type", 0, 2); 
-			switch (i) {
-				case 0:
-					type = Sorbe; break;
-				case 1:
-					type = Granite; break;
-				case 2:
-					type = Slush; break;
-			}
-			Iskrem::nyIskrem(); 
-		}
-
-		void lagreData(ofstream & file) override {
-			file << "SORBET\n";
-			Iskrem::lagreData(file);
-			switch (type) {
-				case 0:
-					file << "Sorbe"; break;
-				case 1:
-					file << "Granite"; break;
-				case 2:
-					file << "Slush"; break;
-			}
-			file << "\n"; 
-		}
+		void skrivData() override;
+		void nyIskrem() override;
+		void lagreData(ofstream& file) override;
 };
 
 class Floteis : public Iskrem {
 	private:
 		bool vegan; 
 	public:
-		Floteis(ifstream& file): Iskrem(file) {
-			file >> vegan; 
-		}
+		Floteis(ifstream& file);
 		Floteis() {}
-		void skrivData() override {
-			string veganStr = "ukjent";			//Defaut verdi hvis noe feiler
-			if (vegan) { veganStr = "Vegan";}else { veganStr = "Ikke vegan";}
-			cout << "Floteis (" << veganStr << ") | ";
-			Iskrem::skrivData();
-			cout << "\n"; 
-		}
-
-		void nyIskrem() override {
-			cout << "Er isen vegansk?\n"
-				<< "\t (0) - Nei\n"
-				<< "\t (1) - Ja\n";
-			switch (lesInt("valg", 0, 1)) {
-				case 0:
-					vegan = false; break;
-				case 1:
-					vegan = true; break; 
-			}
-			Iskrem::nyIskrem();
-		}
-		
-		void lagreData(ofstream & file) override {
-			file << "FLOTEIS\n";
-			Iskrem::lagreData(file); 
-			file << vegan << "\n";
-		}
+		void skrivData() override;
+		void nyIskrem() override;		
+		void lagreData(ofstream& file) override;
 };
 
 
@@ -163,13 +67,11 @@ class Isbil {
 };
 
 vector <Isbil*> gIsbiler; //liste med alle isbiler
-
 void skrivMeny(); 
 void skrivAlleIsbiler(); 
 void skrivBilOgEvtLeggInn(const bool leggInn); 
 void skrivTilFil(); 
 void lesFraFil(); 
-
 
 
 
@@ -219,6 +121,7 @@ void skrivMeny() {
 
 /**
  * @brief  Skriver ut all hoveddata for alle isbiler.
+ * @see void Isbil::skrivOppsummering
  */
 void skrivAlleIsbiler() {
 	if (gIsbiler.size() == 0) {
@@ -233,6 +136,7 @@ void skrivAlleIsbiler() {
 /**
  * @brief Finner isbil på gitt sted. Returner pointer til denne, eller nullptr.
  * @param sted
+ * @see Isbil::returnSted
  * @return pointer til isbil
  */
 Isbil* finnIsbil(string sted) {
@@ -248,6 +152,10 @@ Isbil* finnIsbil(string sted) {
 /**
  * @brief Viser alle biler, lar bruker søke etter sted, og evt legge til iskrem.
  * @param leggInn
+ * @see skrivAlleIsbiler
+ * @see Isbil::finnIsbil
+ * @see Isbil::skrivDetaljertOppsummering
+ * @see Isbil::leggTilIskrem
  */
 void skrivBilOgEvtLeggInn(const bool leggInn) {
 	string sted;
@@ -273,6 +181,7 @@ void skrivBilOgEvtLeggInn(const bool leggInn) {
 
 /**
  * @brief  Lagrer isbiler og dems data i ISBIL.DTA.
+ * @see Isbil::lagreBil
  */
 void skrivTilFil() {
 	ofstream file(FILPLASS);
@@ -311,6 +220,7 @@ void Isbil::skrivOppsummering(){
 
 /**
  * @brief Skriver ut oppsummering av all data for en gitt isbil.
+ * @see Iskrem::skrivData
  */
 void Isbil::skrivDetaljertOppsummering() {
 	// skriver også ut all info om alle iskrem i [iskremsortiment]
@@ -338,6 +248,7 @@ string Isbil::returnSted() {
 /**
  * @brief Lagrer all data for isbil klassen til file stream.
  * @param file
+ * @see Iskrem::lagreData
  */
 void Isbil::lagreBil(ofstream & file) {
 	file << sted <<"\n";
@@ -350,6 +261,8 @@ void Isbil::lagreBil(ofstream & file) {
 
 /**
  * @brief  Bruker UI for å legge til Sorbet eller Fløteis i isbil.
+ * @see Sorbet::nyIskrem
+ * @see Floteis::nyIskrem
  */
 void Isbil::leggTilIskrem() {
 	//legger til ny iskrem i iskrem sortiment. Enten [Sorbet] eller [Floteis]
@@ -400,4 +313,166 @@ Isbil::Isbil(ifstream & file) {
 		}
 	}
 
+}
+
+/**
+ * @brief  Constructor som fyller inn smak og pris fra fil.
+ * @param file
+ */
+Iskrem::Iskrem(ifstream& file) {
+	file >> smak;
+	file >> pris;
+}
+
+/**
+ * @brief  Lagrer smak og pris til file stream.
+ * @param file
+ */
+void Iskrem::lagreData(ofstream& file) {
+	file << smak << "\n";
+	file << pris << "\n";
+}
+
+/**
+ * @brief Skriver ut smak og pris til skjerm.
+ */
+void Iskrem::skrivData() {
+	cout << smak << " | " << pris << " |";
+}
+
+/**
+ * @brief Bruker fyller ut smak og pris på ny iskrem.
+ */
+void Iskrem::nyIskrem() {
+	cout << "sett pris paa iskrem \n";
+	pris = lesInt("pris", 0, 999);
+
+	cout << "Sett smak paa iskremen \nsmak: ";
+	getline(cin, smak);
+}
+
+/**
+ * @brief  Setter iskrem type enum fra fil.
+ * @param file
+ */
+Sorbet::Sorbet(ifstream& file) : Iskrem(file) {
+	string buffer;
+	file >> buffer;
+	if (buffer == "Granite") {
+		type = Granite;
+	}
+	else if (buffer == "Sorbe") {
+		type = Sorbe;
+	}
+	else if (buffer == "Slush") {
+		type = Slush;
+	}
+}
+
+/**
+ * @brief  Henter iskrem type enum og skriver til fil stream.
+ * @see Iskrem::skrivData
+ */
+void Sorbet::skrivData(){
+	string typeStr = "ukjent";			//Defaut verdi hvis noe feiler
+	switch (type) {
+		case 0:
+			typeStr = "Sorbe"; break;
+		case 1:
+			typeStr = "Granite"; break;
+		case 2:
+			typeStr = "Slush"; break;
+	}
+	cout << "Sorbet (" << typeStr << ") | ";
+	Iskrem::skrivData();
+	cout << "\n";
+}
+
+/**
+ * @brief Fyller ut iskrem type enum fra bruker input.
+ * @see Iskrem::nyIskrem
+ */
+void Sorbet::nyIskrem(){
+	cout << "Velg sorbet type\n"
+		<< "\t (0) Sorbe\n"
+		<< "\t (1) Granite\n"
+		<< "\t (2) Slush\n";
+	int i = lesInt("Velg type", 0, 2);
+	switch (i) {
+		case 0:
+			type = Sorbe; break;
+		case 1:
+			type = Granite; break;
+		case 2:
+			type = Slush; break;
+	}
+	Iskrem::nyIskrem();
+}
+/**
+ * @brief  Legger på fil "tags" for Sorbet i file stream.
+ * @param file
+ * @see Iskrem::lagreData
+ */
+void Sorbet ::lagreData(ofstream& file) {
+	file << "SORBET\n";
+	Iskrem::lagreData(file);
+	switch (type) {
+		case 0:
+			file << "Sorbe"; break;
+		case 1:
+			file << "Granite"; break;
+		case 2:
+			file << "Slush"; break;
+	}
+	file << "\n";
+}
+
+/**
+ * @brief Fyller ut vegan bool fra fil.
+ * @param file
+ */
+Floteis::Floteis(ifstream& file) : Iskrem(file) {
+	file >> vegan;
+}
+
+/**
+ * @brief Skriver it om iskrem er vegant eller ikke i tabell.
+ * @see Iskrem::skrivData()
+ */
+void Floteis::skrivData(){
+	string veganStr = "ukjent";			//Defaut verdi hvis noe går galt
+	if (vegan) { veganStr = "Vegan"; }
+	else { veganStr = "Ikke vegan"; }
+
+	cout << "Floteis (" << veganStr << ") | ";
+	Iskrem::skrivData();
+	cout << "\n";
+}
+
+/**
+ * @brief Spør bruker om iskrem er vegant eller ikke.
+ * @see Iskrem::nyIskrem()
+ */
+void Floteis::nyIskrem(){
+	cout << "Er isen vegansk?\n"
+		<< "\t (0) - Nei\n"
+		<< "\t (1) - Ja\n";
+	switch (lesInt("valg", 0, 1)) {
+		case 0:
+			vegan = false; break;
+		case 1:
+			vegan = true; break;
+	}
+	Iskrem::nyIskrem();
+}
+
+/**
+ * @brief  Setter på "tag" for fløteis i file stream og om den er vegan.
+ * @param file
+ * @see Iskrem::lagreData
+ */
+void Floteis::lagreData(ofstream& file){
+	file << "FLOTEIS\n";
+	Iskrem::lagreData(file);
+	file << vegan << "\n";
 }
