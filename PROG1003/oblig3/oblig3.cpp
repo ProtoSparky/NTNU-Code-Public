@@ -480,5 +480,5 @@ void skrivTilFil() {
 		gIsbiler[i]->lagreBil(file);
 	}
 	file.close();					 //lukker filen så andre programmer kan
-	// bruke den igjen
+									 // bruke den igjen
 }
