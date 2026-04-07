@@ -1,0 +1,1 @@
+Her er en kopi av all testdata som kan legges i root directory for å teste koden vår

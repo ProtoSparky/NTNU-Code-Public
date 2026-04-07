@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LesData3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="globaleFunksjoner.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kunderClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="kundeClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="utleiestederClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stedClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gjenstandClass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="tralleSubclass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sykkelSubclass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="elsparkesykkelSubclass.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="LesData3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="const.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="enum.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kundeClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="kunderClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="utleiestederClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stedClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gjenstandClass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="tralleSubclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sykkelSubclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="elsparkesykkelSubclass.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="globaleFunksjoner.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
