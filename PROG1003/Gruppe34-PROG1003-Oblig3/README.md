@@ -1,10 +1,5 @@
 # Gruppe 34 prosjektoppgave
 
-# Gruppedeltagere
-- Kristupas Kaupas, epost: kristupk@stud.ntnu.no, tlf: 92982669
-- Rangvald Jansen, epost: ragnvaja@stud.ntnu.no, tlf: 47680044
-
-
 # PDF filer og testdata
 ## pdf
 Her er alle pdf filene for testing og dta dokumentasjon
