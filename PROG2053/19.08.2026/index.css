@@ -1,0 +1,11 @@
+table, th, td {
+  border: 1px solid black;
+}
+#sex{
+    position:absolute;
+    font-size:500px; 
+    top:0;
+    left:0;
+
+    transform:translate(-50%,-50%) rotate(5deg);
+}
