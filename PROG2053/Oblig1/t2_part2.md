@@ -111,3 +111,41 @@ A store wants custom lists. They have an image named heart.png. Use this image a
 ### Scenario 4
 Text looks messy on phones. Move the bullets inside the text box block.
 
+comment:*I dont fully understaand what you mean by "text box block so i moved it in an element called "text_block".* 
+```
+<html>
+    <head>
+        
+    </head>
+    <body>
+        <div id="text_block">
+            <ul class="mobile-list">
+                <li>This is a very long sentence that wraps down to a second line on small phone
+                screens.</li>
+                <li>Another long sentence to test how the text behaves when it runs out of space.</li>
+            </ul>
+        </div>
+    </body>
+</html>
+```
+
+### Scenario 5
+The text looks too crowded. Add space between list items. Make the lines taller.
+```
+<html>
+    <head>
+        <style>
+            li {
+                margin-bottom:30px; 
+            }
+        </style>
+    </head>
+    <body>
+        <ul class="readable-list">
+            <li>First important news update of the morning.</li>
+            <li>Second major announcement from the team.</li>
+            <li>Third breaking update regarding the event.</li>
+        </ul>
+    </body>
+</html>
+```
