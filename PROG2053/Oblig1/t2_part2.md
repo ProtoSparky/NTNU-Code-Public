@@ -41,3 +41,73 @@ Box2 uses border-box which forces the total width and height to be a set size. I
 Elements within other elements are by default placed in the top left corner, but this box sizing would "center it more" towards the middle if increased from 20 to 30 px.
 
 # 3
+## Scenarios
+
+### Scenario 1
+A cafe website needs lists. They want the bullets look like squares for the menu list.
+```
+<html>
+    <head>
+        <style>
+            .cafe-menu{
+                list-style-type: square;
+            }
+        </style>
+    </head>
+    <body>
+        <ul class="cafe-menu">
+            <li>Hot Coffee</li>
+            <li>Iced Tea</li>
+            <li>Fresh Juice</li>
+        </ul>
+    </body>
+</html>
+
+```
+
+### Scenario 2
+A teacher makes a quiz. It needs numbers. Use small Roman numerals like i, ii, and iii
+
+```
+<html>
+    <head>
+        <style>
+            .history-quiz{
+                list-style-type:lower-roman;
+            }
+        </style>
+    </head>
+    <body>
+        <ol class="history-quiz">
+            <li>Who discovered America?</li>
+            <li>In what year did World War II end?</li>
+            <li>What was the ancient capital of Egypt?</li>
+        </ol>
+    </body>
+</html>
+```
+
+### Scenario 3
+A store wants custom lists. They have an image named heart.png. Use this image as the bullet.
+```
+<html>
+    <head>
+        <style>
+            .game-features{
+                list-style-image:url("./heart.png");
+            }
+        </style>
+    </head>
+    <body>
+        <ul class="game-features">
+            <li>Retro Pixel Art</li>
+            <li>Multiplayer Mode</li>
+            <li>Custom Avatars</li>
+        </ul>
+    </body>
+</html>
+```
+
+### Scenario 4
+Text looks messy on phones. Move the bullets inside the text box block.
+
