@@ -149,3 +149,56 @@ The text looks too crowded. Add space between list items. Make the lines taller.
     </body>
 </html>
 ```
+
+## Scenarios pt 2
+### Scenario 1
+Scenario 1: A sports team stats sheet has 100 rows, making it hard to track individual
+player metrics. To fix this, they want every single alternate even row to automatically
+change its background to a light gray color (#eee).
+
+comment:*im just assuming you wanted me o select all elements with the class "even".* 
+*the css below would actually select even rows*
+```            
+tr:nth-child(even){
+    background-color: #eee; 
+}
+``` 
+
+
+
+
+```
+<html>
+    <head>
+        <style>            
+            .even{
+                background-color: #eee;
+            }        
+        </style>
+    </head>
+    <body>
+        <table class="stats-table">
+            <tr>
+                <th>Player</th>
+                <th>Score</th>
+            </tr>
+            <tr>
+                <td>Alex</td>
+                <td>14</td>
+            </tr>
+            <tr class="even">
+                <td>Blake</td>
+                <td>22</td>
+            </tr>
+            <tr>
+                <td>Charlie</td>
+                <td>9</td>
+            </tr>
+            <tr class="even">
+                <td>Dana</td>
+                <td>31</td>
+            </tr>
+        </table>
+    </body>
+</html>
+```
