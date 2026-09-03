@@ -156,8 +156,8 @@ Scenario 1: A sports team stats sheet has 100 rows, making it hard to track indi
 player metrics. To fix this, they want every single alternate even row to automatically
 change its background to a light gray color (#eee).
 
-comment:*im just assuming you wanted me o select all elements with the class "even".* 
-*the css below would actually select even rows*
+comment:*im just assuming you wanted me to select all elements with the class "even".* 
+*the css below would actually select even rows, but i didnt use since it doesnt seem like that is what you wanted*
 ```            
 tr:nth-child(even){
     background-color: #eee; 
@@ -199,6 +199,88 @@ tr:nth-child(even){
                 <td>31</td>
             </tr>
         </table>
+    </body>
+</html>
+```
+
+### Scenario 2
+Scenario 2: A user is looking at a huge data chart. To help them see which row they are
+looking at, make the background color of a row change when the computer mouse
+hovers over it. Also, if a box inside the chart is completely empty, hide its borders
+
+```
+<html>
+    <head>
+        <style>
+            tr:hover{
+                background-color:white;
+            }
+            table, th, td{
+                border: 1px solid black;
+                /*border-collapse:collapse;*/ /*turns out this breaks empty-cells*/
+            }
+            .data-grid{
+                empty-cells:hide; 
+                background-color:grey; 
+            }
+        </style>
+    </head>
+    <body>
+        <table class="data-grid">
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>001</td>
+                <td>Active</td>
+            </tr>
+            <tr>
+                <td>002</td>
+                <td></td>
+            </tr>
+        </table>
+    </body>
+</html>
+
+```
+
+### Scenario 3 
+A user clicks inside a text box to start typing an email address. To show the
+box is active and currently receives focus (typing mode), change its background color to
+white.
+```
+<html>
+    <head>
+        <style>
+            .email-box:focus{
+                background-color:white; /*this does absolutely nothing because it will always be white by default no matter wether its focused or not*/
+            }
+        </style>
+    </head>
+    <body>
+        <input type="email" class="email-box">
+    </body>
+</html>
+
+```
+
+### Scenario 4
+An app built for elderly users needs text fields that are very easy to see.
+Make the text inside the input boxes large (120% size) and change the color of the text
+to a distinct gray color (#555)
+```
+<html>
+    <head>
+        <style>
+            .large-box{
+                background-color:#555; 
+                font-size:120%;
+            }
+        </style>
+    </head>
+    <body>
+        <input type="text" class="large-box">
     </body>
 </html>
 ```

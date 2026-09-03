@@ -1,0 +1,33 @@
+<html>
+    <head>
+        <style>
+            tr:hover{
+                background-color:white;
+            }
+            table, th, td{
+                border: 1px solid black;
+                /*border-collapse:collapse;*/ /*turns out this breaks empty-cells*/
+            }
+            .data-grid{
+                empty-cells:hide; 
+                background-color:grey; 
+            }
+        </style>
+    </head>
+    <body>
+        <table class="data-grid">
+            <tr>
+                <th>ID</th>
+                <th>Status</th>
+            </tr>
+            <tr>
+                <td>001</td>
+                <td>Active</td>
+            </tr>
+            <tr>
+                <td>002</td>
+                <td></td>
+            </tr>
+        </table>
+    </body>
+</html>
