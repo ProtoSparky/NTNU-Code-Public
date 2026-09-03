@@ -1,4 +1,121 @@
+# 1
+index.html
+```
+<html>
+    <head>
+        <title>My hobby page</title>
+    </head>
+    <body>
+        <h1>My Favorite Hobbies</h1>
+        <p>I enjoy spending my free time doing different activities that make me happy</p>
+        <img src="./hobby.jpg" alt="Hobby Image">
+
+        <ul style="border-bottom-style:solid;">
+            <li>Reading</li>
+            <li>Painting</li>
+            <li>Traveling.</li>
+        </ul>
+
+        <table>
+            <tr>
+                <th>Hobby</th>
+                <th>Time Spent per Week (Hours)</th>
+            </tr>
+            <tr>
+                <td>Sleeping</td>
+                <td>70</td>
+            </tr>
+            <tr>
+                <td>Being a menace to society</td>
+                <td>63</td>
+            </tr>
+            <tr>
+                <td>Inspecting beans :3</td>
+                <td>35</td>
+            </tr>
+        </table>
+        <a href="https://example.com/hobbies">Learn more about hobbies</a>
+        <br>
+        <a href="./contact.html">Contact</a>
+
+    </body>
+</html>
+```
+
+contact.html
+```
+<html>
+    <head>
+
+    </head>
+    <body>
+        <form action="./index.html" method="post">
+            <label for="name">First name</label>
+            <input type="text" id="name">
+
+            <br>
+
+            <select>
+                <option value="hobby_suggestion">Hobby suggestion</option>
+                <option vaalue="website_feedback">Website feedback</option>
+            </select>
+            <br>
+
+            <textarea>Enter a detailed message here</textarea>
+
+            <br>            
+            <input type="submit">
+
+        </form>
+
+        <a href="./index.html">Go back to hobby page</a>
+
+    </body>
+</html>
+```
 # 2
+## part 1
+```
+<html>
+    <head>
+        <style>
+            *{
+                margin:0;
+                padding:0;
+            }
+            body{
+                font-family: 'Helvetica Neue', Helvetica, sans-serif;
+            }
+            #event-card{
+                background-color: #f0fdf4;
+                width:450px;
+                padding:25px;
+                margin:60px auto; 
+            }
+            .align-wrapper{
+                text-align:center; 
+            }
+            .event-title{
+                color:#1e293b;
+                font-size:28px;
+            }
+            .status-alert{
+                color:#059669; 
+                text-decoration: underline double #059669;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="event-card" class="align-wrapper">
+            <h2 class="event-title">AI & Design Meetup</h2>
+            <p class="status-alert">Status: Registration Open</p>
+        </div>
+    </body>
+</html>
+```
+
+
+
 
 ## part 2
 
@@ -163,8 +280,6 @@ tr:nth-child(even){
     background-color: #eee; 
 }
 ``` 
-
-
 
 
 ```
