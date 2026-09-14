@@ -52,3 +52,57 @@ while(j <= 8){
 `+` in our case is used with the equal symbol to increment total by j
 `*` in our case is used with the equal symbol to multiply total by j
 `%` in our case is used to run the modulo operation on j to see if it is divisible by 2
+
+
+# Q2
+## 1
+Convert the string ‘I am writing in Javascript!’ into an array
+```
+    const string = "I am writing in Javascript!";
+    let array = string.split("");
+    //or just treat the string as an array
+    //  and for example use string[0]
+    //  which would return "I"
+    console.log(array);
+```
+You can use the split feature on strings to explicitly split at nothing to separate each char into a char array, or just treat the string as an array and access the values that way.
+I suppose using split would reduce the amount of errors if a var got assigned something else than a string, but the other method should work as well.
+
+## 2
+Suppose this string was already stored as an array. How would you convert it back into a
+single string?
+```
+const stringArray = [
+    "I",
+    " ",
+    "a",
+    "m",
+    " ",
+    "w",
+    "r",
+    "i",
+    "t",
+    "i",
+    "n",
+    "g",
+    " ",
+    "i",
+    "n",
+    " ",
+    "J",
+    "a",
+    "v",
+    "a",
+    "s",
+    "c",
+    "r",
+    "i",
+    "p",
+    "t",
+    "!"
+];
+
+let string = stringArray.join("")
+console.log(string); 
+```
+you could probably do the same using a for loop but js has a built in function for joining strings or arrays at something, and in this case its at nothing, so each letter or space gets joined after each other.
