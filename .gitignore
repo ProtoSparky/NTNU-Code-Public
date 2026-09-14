@@ -1,10 +1,9 @@
 # Visual Studio Code #
-.vscode/*
-.vscode/settings.json
-!.vscode/settings.json
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/extensions.json
+**/.vscode/*
+**/.vscode/settings.json
+**/.vscode/tasks.json
+**/.vscode/launch.json
+**/.vscode/extensions.json
 .history.vscode/settings.json
 
 ## Ignore Visual Studio temporary files, build results, and
@@ -436,3 +435,5 @@ FodyWeavers.xsd
 *.msm
 *.msp
 *.slnx
+.vscode/launch.json
+.vscode/settings.json
