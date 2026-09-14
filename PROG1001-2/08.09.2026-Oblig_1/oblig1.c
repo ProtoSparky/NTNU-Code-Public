@@ -10,7 +10,6 @@
 #include <stdbool.h>
 
 const int STRLEN = 80; ///< maks tekst lengde
-const int timerIÅret = ((8 * 5) * 4.33) * 52; 
 /**
  * Hovedprogrammet 
  */
@@ -18,7 +17,9 @@ int main(){
     char navn1[STRLEN],  navn2[STRLEN];     //navn for pers
     int navn1Timelønn, navn2Timelønn;       //timelønn for de to folka
     int navn1Ferieuker, navn2Ferieuker;     //ant ferieuker
+    bool likeNavn, likeTimeslønn;
 
+    
 
     //spør etter brukerdata
 
@@ -38,16 +39,44 @@ int main(){
     scanf("%d", &navn2Ferieuker); 
 
 
+    printf("\n"); //rydder opp terminal output
+
+
     //Skriver ut for navn 1
-    printf("Navn: %s (lengde: %i)", 
+    printf("Navn: %s (lengde: %i)\n", 
         navn1,
         (sizeof(navn1)/sizeof(navn1[0]))    //finner lengde på array
     );
-    printf("Timelønn: %d", navn1Timelønn);
-    printf("Ferie uker: %d", navn1Ferieuker);
-    
+    printf("Timelønn: %d\n", navn1Timelønn);
+    printf("Ferie uker: %d\n", navn1Ferieuker);
+    printf("Ukelønn: %d\n", (navn1Timelønn* 8) * 5); 
+    printf("Månedslønn %.1f\n", ((navn1Timelønn * 8) * 5) * 4.33); 
+    printf("Årslønn: %.1f\n", ((navn1Timelønn* 8) * 5)* (52 - navn1Ferieuker)); 
 
 
+
+    printf("\n"); //rydder opp terminal output
+
+
+
+    printf("Navn: %s (lengde: %i)\n", 
+        navn2,
+        (sizeof(navn2)/sizeof(navn2[0]))    //finner lengde på array
+    );
+    printf("Timelønn: %d\n", navn2Timelønn);
+    printf("Ferie uker: %d\n", navn2Ferieuker);
+    printf("Ukelønn: %d\n", (navn2Timelønn* 8) * 5); 
+    printf("Månedslønn %.1f\n", ((navn2Timelønn * 8) * 5) * 4.33); 
+    printf("Årslønn: %.1f\n", ((navn2Timelønn* 8) * 5)* (52 - navn2Ferieuker)); 
+
+
+    printf("\n"); //rydder opp terminal output
+
+    likeNavn = (navn1 == navn2);
+    likeTimeslønn = (navn1Timelønn == navn2Timelønn); 
+
+    printf("Like navn: %d\n", likeNavn);
+    printf("Lik timeslønn: %d\n", likeTimeslønn); 
 
     return 0;
 }
