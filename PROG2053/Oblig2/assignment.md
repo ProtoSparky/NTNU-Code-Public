@@ -69,6 +69,7 @@ You can use the split feature on strings to explicitly split at nothing to separ
 I suppose using split would reduce the amount of errors if a var got assigned something else than a string, but the other method should work as well.
 
 ## 2
+### A
 Suppose this string was already stored as an array. How would you convert it back into a
 single string?
 ```
@@ -106,3 +107,124 @@ let string = stringArray.join("")
 console.log(string); 
 ```
 you could probably do the same using a for loop but js has a built in function for joining strings or arrays at something, and in this case its at nothing, so each letter or space gets joined after each other.
+
+### B
+Rewrite the following constructor function as a JavaScript class and ensure that the method
+describe is properly implemented as part of the class definition.
+
+```
+class Food{
+    constructor(name, cooktime){
+        this.name = name;
+        this.cooktime = cooktime;
+    }
+    describe(){
+        console.log(
+            `${this.name} is delicious and will take ${this.cooktime} to finish cooking.`
+        );
+    }
+}
+
+
+const food1 = new Food('Pizza', '15 min');
+food1.describe();
+```
+
+# Q3 
+```
+const student = {
+    name:"Sparky",
+    age:21, 
+    course:"Digsec", 
+    greet:function(){
+        return `Hello, I am ${this.name}`;
+    }
+}
+let body = document.body;
+
+const greetName  = document.createElement("div");
+greetName.innerHTML = student.greet();
+body.appendChild(greetName); 
+
+//Create a string variable and use string methods to display different versions of the text:
+const string = student.greet();
+
+//toUpperCase
+const stringUpper = document.createElement("div");
+stringUpper.innerHTML = string.toUpperCase();
+body.appendChild(stringUpper);
+
+//length
+const stringLength = document.createElement("div");
+stringLength.innerHTML = string.length;
+body.appendChild(stringLength);
+
+//pop
+const stringPop = document.createElement("div");
+stringPop.innerHTML = string.split("").pop(); // i assume this is what you expect when asking for me to use .pop()
+body.appendChild(stringPop); 
+
+//replace
+const stringReplace = document.createElement("div");
+stringReplace.innerHTML = string.replace("Hello", "Goodbye");
+body.appendChild(stringReplace)
+```
+
+# Q4
+
+```
+/*
+Ask the user to enter the current outdoor temperature in degrees and check whether it is hotter
+than, colder than, or exactly equal to a perfect target temperature value set in your code.
+Output the result to the user.
+*/
+const targetTemperature = 25; //Temperature we check against
+
+const wrapper = document.createElement("div");
+document.body.appendChild(wrapper);
+
+//text header
+const header = document.createElement("div");
+header.innerHTML = "Enter a temperature and guess whether it is higher or lower than my code";
+wrapper.appendChild(header);
+
+//message whether temp is exact, lower or higher than code
+const checkMessage = document.createElement("div");
+
+//input temperature
+const input = document.createElement("input");
+input.type = "number";
+input.min = "-100";
+input.max = "100";
+input.value = "20";
+input.addEventListener("click",function(){
+    checkMessage.innerHTML = ""; // clears message when adjusting temp;
+})
+wrapper.appendChild(input);
+
+
+//submit button
+const checkBTN = document.createElement("button");
+checkBTN.innerHTML = "Guess Temperature";
+checkBTN.addEventListener("click",function(){
+    if(input.value < targetTemperature){
+        //lower
+        checkMessage.innerHTML = "Too cold!";
+        checkMessage.style.color = "blue";
+    }
+    else if(input.value == targetTemperature){
+        //exact match
+        checkMessage.innerHTML = "Exact match. Comfy temp :)";
+        checkMessage.style.color = "green";
+    }
+    else if(input.value > targetTemperature){
+        //too hot
+        checkMessage.innerHTML = "Too hot!";
+        checkMessage.style.color = "red";
+    }
+});
+wrapper.appendChild(checkBTN);
+
+//applies check message lower cause i dont want to use ID and yet want to keep text below other UI elements
+wrapper.appendChild(checkMessage);
+```
