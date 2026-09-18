@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>DOM Traversal Exercise</title>
+    </head>
+    <body>
+        <section id="main-section">
+        <h2 id="main-title">Welcome to JavaScript</h2>
+        <section id="nested-section">
+        <p id="intro-text">This is an introduction paragraph inside a nested
+        section.</p>
+        <!-- Comment node here -->
+        <p id="nested-detail">Details paragraph inside nested section.</p>
+        
+        </section>
+            <p id="footer-text">This is a footer paragraph outside the nested
+            section.</p>
+        </section>
+        <script>
+            const introText = document.getElementById('intro-text');
+            // 1. parentNode of introText
+            console.log('parentNode:', introText.parentNode.nodeName);
+            // 2. childNodes of parentNode (includes text and comment nodes)
+            console.log('childNodes:', introText.parentNode.childNodes.length);
+            // 3. firstElementChild of parentNode
+            console.log('firstElementChild:',
+            introText.parentNode.firstElementChild.nodeName);
+            // 4. nextSibling of introText
+            console.log('nextSibling:', introText.nextSibling.nodeName);
+            // 5. nextElementSibling of introText
+            console.log('nextElementSibling:', introText.nextElementSibling.nodeName);
+        </script>
+    </body>
+</html>

@@ -7,7 +7,7 @@ function main(){
             this.ISBN = ISBN;
         }
         get description(){
-            return `This book is called ${this.name} by ${this.author} and has ISBN:${this.ISBN}`;
+            return `This book is called ${this.name} by ${this.author} and has ${this.ISBN}`;
         }
         set nameChange(name){
             this.name = name;
