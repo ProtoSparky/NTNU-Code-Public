@@ -1,6 +1,3 @@
-/*
-TODO. NOT FINISHED
-*/
 
 function main(){
     class Book{
@@ -9,23 +6,49 @@ function main(){
             this.author = author;
             this.ISBN = ISBN;
         }
-        get descriotion(){
-            return `This book is called ${this.name} by ${this.author} and has ${this.ISBN}`;
+        get description(){
+            return `This book is called ${this.name} by ${this.author} and has ISBN:${this.ISBN}`;
         }
         set nameChange(name){
             this.name = name;
         }
     }
 
-    const promise = new Promise(function(resolve, reject){
-        promise.then(function(value){
+    //we create a new book
+    const bookClass = new Book(
+        "The Hunger Games",
+        "Suzanne Collins",
+        "978-0-439-02352-8"
 
-        });
+    );
+
+
+    //actuaally we want to change the name of the book
+    bookClass.nameChange= "The Hungrier Games";
+
+    
+    const promise = new Promise((resolve, reject)=>{
+        setTimeout(()=>{
+            resolve("Data loaded successfully");
+        },3000);
     });
 
-    setTimeout(function(){
-        
+    promise.then((message)=>{
+        console.log(message);
+        document.body.innerHTML = bookClass.description; //write to html
+    })
+    promise.catch((error)=>{
+        console.log(error);
+    })
 
-    },3000); //yes we are wasting time, but this assignment expects it for some reason
-
+    /* could also do this, but i think its less clean
+    promise
+    .then((message)=>{
+        console.log(message);
+        document.body.innerHTML = bookClass.description; //write to html
+    })
+    .catch((error)=>{
+        console.log(error);
+    })
+    */
 }
