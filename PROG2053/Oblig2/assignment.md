@@ -1,3 +1,4 @@
+
 # Q1
 ## 1
 *What will be the final value of **total** after the code executes?*
@@ -56,7 +57,7 @@ while(j <= 8){
 
 # Q2
 ## 1
-Convert the string ‘I am writing in Javascript!’ into an array
+*Convert the string ‘I am writing in Javascript!’ into an array*
 ```
     const string = "I am writing in Javascript!";
     let array = string.split("");
@@ -70,8 +71,8 @@ I suppose using split would reduce the amount of errors if a var got assigned so
 
 ## 2
 ### A
-Suppose this string was already stored as an array. How would you convert it back into a
-single string?
+*Suppose this string was already stored as an array. How would you convert it back into a*
+*single string?*
 ```
 const stringArray = [
     "I",
@@ -109,8 +110,8 @@ console.log(string);
 you could probably do the same using a for loop but js has a built in function for joining strings or arrays at something, and in this case its at nothing, so each letter or space gets joined after each other.
 
 ### B
-Rewrite the following constructor function as a JavaScript class and ensure that the method
-describe is properly implemented as part of the class definition.
+*Rewrite the following constructor function as a JavaScript class and ensure that the method*
+*describe is properly implemented as part of the class definition.*
 
 ```
 class Food{
@@ -228,3 +229,99 @@ wrapper.appendChild(checkBTN);
 //applies check message lower cause i dont want to use ID and yet want to keep text below other UI elements
 wrapper.appendChild(checkMessage);
 ```
+
+# Q5
+```
+class Book{
+    constructor(name,author,ISBN){
+        this.name = name;
+        this.author = author;
+        this.ISBN = ISBN;
+    }
+    get description(){
+        return `This book is called ${this.name} by ${this.author} and has ${this.ISBN}`;
+    }
+    set nameChange(name){
+        this.name = name;
+    }
+}
+
+//we create a new book
+const bookClass = new Book(
+    "The Hunger Games",
+    "Suzanne Collins",
+    "978-0-439-02352-8"
+
+);
+
+
+//actuaally we want to change the name of the book
+bookClass.nameChange= "The Hungrier Games";
+
+
+const promise = new Promise((resolve, reject)=>{
+    setTimeout(()=>{
+        resolve("Data loaded successfully");
+    },3000);
+});
+
+promise.then((message)=>{
+    console.log(message);
+    document.body.innerHTML = bookClass.description; //write to html
+})
+promise.catch((error)=>{
+    console.log(error);
+})
+```
+
+# Q6
+## 1
+*Represent the full DOM tree for this HTML, showing the hierarchy of elements and
+text/comment nodes.*
+
+Given that the question is super vague, I'll make a diagram of the DOM tree. 
+
+
+
+
+# Q7
+
+```
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport"
+        content="width=device-width, initial-scale=1.0">
+        <title>Course Registration</title>
+    </head>
+    <body>
+        <h1>Course Registration</h1>
+        <label for="course">Enter a course name:</label>
+        <input type="text" id="course">
+        <button id="register-button">Register</button>
+        <p id="message"></p>
+        <script>
+            //create listener for when person clicks on button
+            document.getElementById("register-button").addEventListener("click",function(){
+                registerCourse();
+            }); 
+
+            function registerCourse(){
+                const inputData = document.getElementById("course").value;
+                const messageBanner = document.getElementById("message");
+
+                if(inputData == ""){messageBanner.innerHTML = "Please enter a course name.";}
+                else{messageBanner.innerHTML = `You are registered for ${inputData}.`;}
+            }
+        </script>
+    </body>
+</html>
+```
+
+## What the click event does
+It runs a specific function or code when the user clicks the element it is attached to
+## What the registerCourse() function does.
+It gets the data from the input field, checks whether its empty, and writes a message based on its state. 
+## Why addEventListener() is used.
+Creates the event for the click of the button, and appends it to the button element. 
