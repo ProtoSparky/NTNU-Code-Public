@@ -279,10 +279,60 @@ promise.catch((error)=>{
 *Represent the full DOM tree for this HTML, showing the hierarchy of elements and
 text/comment nodes.*
 
-Given that the question is super vague, I'll make a diagram of the DOM tree. 
+Ill make a diagram of the DOM given how vague the question is.
 
+```
+                                                                +---------+                                                                                                  
+                                                                |Document |                                                                                                  
+                                                                +----+----+                                                                                                  
+                                                                     |                                                                                                       
+                                                                     |                                                                                                       
+                                                                 +---+----+                                                                                                  
+                                                                 |  HTML  |                                                                                                  
+                                                                 +---+----+                                                                                                  
+                                                                     |                                                                                                       
+                                                                     |                                                                                                       
+                                                        +----+       |         +----+                                                                                        
+                                                        |head+-------+---------+body|                                                                                        
+                                                        +-+--+                 +-+--+                                                                                        
+                                                          |                      |                                                                                           
+  +-------------------------+-----------------------------+                      +----------------------------+                                                              
+  |                         |                             |                      |                            |                                                              
++-+--+     +---------+    +-+--+     +---------+       +--+--+                 +-+-----+   +---------+     +--+---+                                                          
+|meta+-----+attribute|    |meta+-----+attribute|       |title|                 |section+---+attribute|     |script|                                                          
++----+     +---------+    +----+     +---------+       +--+--+                 +---+---+   +---------+     +--+---+                                                          
+                                                          |                        |                          |                                                              
+                                                        +-+--+                     |                        +-+--+                                                           
+                                                        |text|                     |                        |text|                                                           
+                                                        +----+                     |                        +----+                                                           
+                                                                                   |                                                                                         
+                                                                                   |                                                                                         
+                                                                                   |                                                                                         
+                                                                                   +---+------------------------+--------------------------------------------+               
+                                                                                       |                        |                                            |               
+                                                                                     +-+--+  +---------+    +---+---+  +---------+                          +++   +---------+
+                                                                                     | h2 +--+attribute|    |section+--+attribute|                          |p+---+attribute|
+                                                                                     +-+--+  +---------+    +---+---+  +---------+                          +++   +---------+
+                                                                                       |                        |                                            |               
+                                                                                     +-+--+                     |                                         +--+-+             
+                                                                                     |text|                     +-------------------+                     |text|             
+                                                                                     +----+                     |                   |                     +----+             
+                                                                                                               +++  +---------+    +++  +---------+                          
+                                                                                                               |p+--+attribute|    |p+--+attribute|                          
+                                                                                                               +++  +---------+    +++  +---------+                          
+                                                                                                                |                   |                                        
+                                                                                                             +--+-+               +-+--+                                     
+                                                                                                             |text|               |text|                                     
+                                                                                                             +----+               +----+                                     
+```
 
-
+## 2 
+### Identify which element or node is being accessed
+The element `<section id="nested-section">` is being accessed by getting `<p id="intro-text">` and then looking for the parent node (the one above intro-text)
+### Name the DOM traversal property used.
+`.parentNode` was used to get the element above. 
+### Explain how the property works and why it returns that result in this context.
+These properties work by navigating relatively to other elements. It works the way it does because of the provided DOM layout. 
 
 # Q7
 
