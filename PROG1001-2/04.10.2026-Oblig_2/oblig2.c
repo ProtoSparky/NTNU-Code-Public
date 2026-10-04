@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <ctype.h>
 
+
 const int STRLEN = 40; ///< Max. tekstlengde.
 const int MAXBRUKERE = 20; ///< Max. antall brukere.
 const int ASCIINRFORST = 33; ///< Første lovlige ASCII-nr som brukes.
@@ -30,7 +31,6 @@ int main(){
 
 
 
-
     do{
         printf("Skriv et valg: \n");
         printf("N - Ny bruker\n"); 
@@ -40,12 +40,34 @@ int main(){
 
 
         printf("Valg: "); 
-        scanf("%c", &menyValg);
+        scanf(" %c", &menyValg);
         menyValg = toupper(menyValg); //gjør til store bokstaver
-        printf("valg meny er %c", menyValg);
+        //printf("valg meny er-------------------- %c", menyValg);
+
+        
+        switch(menyValg){
+            case 'N':{
+                printf("Ny bruker lages");
+                break; 
+            }
+            case 'L':{
+                printf("Logg inn bruker");
+                break;
+            }
+            case 'S':{
+                printf("skriv alle brukere");
+                break;
+            }
+            default:{
+                //feil kommando
+                printf("Kommando er feil!\n"); 
+                break; 
+            }
+        }
+        
 
     }
-    while{1};
+    while(menyValg != "Q");
 
 
     return 0; 
