@@ -145,12 +145,46 @@ int main(){
                 break; 
             }
             case 'L':{
-                printf("Logg inn bruker");
+                char inputBrukernavn[STRLEN];
+                char inputPassord[STRLEN];
+                bool funnetBruker = false;
+                printf("\nSkriv inn brukernavn: ");
+                scanf("%s", &inputBrukernavn); 
+
+                printf("\nSkriv inn passord: ");
+                scanf("%s", &inputPassord); 
+                encrypt(inputPassord);
+
+                //går gjennom alle lagrede brukere og sjekker om
+                //  brukernavn og passord er like
+                for(int i = 0; i < antBrukere; i ++){
+                    if(
+                        strcmp(brukerNavn[i], inputBrukernavn) && 
+                        strcmp(brukerPass[i], inputPassord)
+                    ){funnetBruker = true;}                    
+                }
                 
+                if(funnetBruker){
+                    printf("Bruker %s er logget inn\n",inputBrukernavn);
+                }
+                else{
+                    printf("Brukernavn eller passord er feil\n"); 
+                }
+
+
                 break;
             }
             case 'S':{
-                printf("skriv alle brukere");
+                printf("%d / %d registrerte brukere\n", antBrukere, MAXBRUKERE);
+                printf("ID | Brukernavn | Kryptert passord |\n"); 
+                for(int i = 0; i < antBrukere; i++){
+                    printf("%d | %s | %s |\n", i+1,brukerNavn[i],brukerPass[i]);
+                }
+                printf("\n");
+
+                break;
+            }
+            case 'Q':{
                 break;
             }
             default:{
