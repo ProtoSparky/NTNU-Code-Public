@@ -29,35 +29,58 @@ void encrypt(char* passord){
         int ascii = passord[i];
         int verdi = (((ascii - ASCIINRFORST) + CIPHER) % MOD) + ASCIINRFORST;
         kryptertText[i] = (char)verdi;
-        //printf("orginal char (%c), ascii (%d), kryptert (%c)\n", passord[i], ascii, kryptertText[i]); 
     }
     strcpy(passord, kryptertText); 
 }
+
+/**
+ * @brief sjekker om passord er innenfor kravene eller ikke
+ * 
+ * @param passord 
+ * @return true 
+ * @return false 
+ */
 bool sjekkPassord(char* passord){
     int storBokstavStart = 65, storBokstavSlutt = 90;
     int litenBokstavStart = 97, litenBokstavSlutt = 122; 
+    bool storeBokstaverOK = false, småBokstaverOK = false, alleCharsOK = false; 
     int antChars = sizeof(passord) / sizeof(passord[0]); 
-    bool storeBokstaaverOK = false, småBokstaaverOK = false,
-    alleCharsOK = false; 
-
 
     for(int i = 0; i < antChars; i++){
         //går gjennom alle tegn i passordet
         int bokstav = passord[i]; 
 
-        //sjekker alle etter minst 1 stor bokstav
-        for(int x = storBokstavStart; x < storBokstavSlutt; x ++){
-            if(bokstav == x){storeBokstaaverOK = true;} //funnet en stor bokstav
+        //sjekker etter store bokstaver
+        if(
+            (bokstav >= ASCIINRFORST && bokstav <= ASCIINRSIST) &&
+            (bokstav >= storBokstavStart && bokstav <= storBokstavSlutt)
+        ){
+            storeBokstaverOK = true;
+            //printf("Stor bokstav %c\n", bokstav);
         }
-        
-    }
-}
-/*
-                char passord[] = "ARSENAL";
-                encrypt(passord);
-                printf("passord er %s", passord);
 
-*/
+        //sjekker etter små bokstaver
+        if(
+            (bokstav >= ASCIINRFORST && bokstav <= ASCIINRSIST) &&
+            (bokstav >= litenBokstavStart && bokstav <= litenBokstavSlutt)
+        ){
+            småBokstaverOK = true;
+            //printf("små bokstave %c\n", bokstav); 
+        }
+
+        //sjekker etter spesielle chars, ikke bokstaver
+        if(
+            (bokstav >= ASCIINRFORST && bokstav <= ASCIINRSIST) && 
+            !(bokstav >= storBokstavStart && bokstav <= storBokstavSlutt) && 
+            !(bokstav >= litenBokstavStart && bokstav <= litenBokstavSlutt)
+        ){
+            alleCharsOK = true;
+            //printf("chars funnet %c\n", bokstav); 
+        }
+
+    }
+    return storeBokstaverOK && småBokstaverOK && alleCharsOK; //alle finnes
+}
 
 
 
@@ -71,10 +94,7 @@ int main(){
     char brukerNavn[MAXBRUKERE][STRLEN]; // 2-dim array for brukernavnene.
     char brukerPass[MAXBRUKERE][STRLEN]; // 2-dim array for passordene.
     int antBrukere = 0; // Antall brukere registrert hittil
-
     char menyValg; //char for menyvalg
-
-
 
     do{
         printf("Skriv et valg: \n");
@@ -87,26 +107,37 @@ int main(){
         printf("Valg: "); 
         scanf(" %c", &menyValg);
         menyValg = toupper(menyValg); //gjør til store bokstaver
-        //printf("valg meny er-------------------- %c", menyValg);
-
         
         switch(menyValg){
             case 'N':{
                 printf("Ny bruker lages\n");
                 
                 if(antBrukere < MAXBRUKERE){
-                    char brukernavn[STRLEN];
-                    char passord[STRLEN];
+                    char inputBrukernavn[STRLEN];
+                    char inputPassord[STRLEN];
+
                     printf("Skriv inn brukernavn: ");
-                    scanf("%s", &brukernavn);
+                    scanf("%s", &inputBrukernavn);
+
                     printf("\nskriv inn passord:\n");
                     printf("Passord må ha minst EN stor bokstav, ");
                     printf("minst EN liten bokstav, og minst ET spesiell tegn");
                     printf(". Dvs alle valid ascii tegn. \n");
                     printf("passord: ");
-                    scanf("%s", &passord);
-                    
 
+                    scanf("%s", &inputPassord);
+                    
+                    if(sjekkPassord(inputPassord)){
+                        encrypt(inputPassord); //krypterer passordet
+                        
+                        //lagrer brukerdata
+                        strcpy(brukerNavn[antBrukere], inputBrukernavn);
+                        strcpy(brukerPass[antBrukere], inputPassord);
+                        antBrukere ++;
+                    }
+                    else{
+                        printf("passordet oppnår ikke kravene. Prøv på nytt\n");
+                    }
 
                 }
                 else{printf("Du har oppnådd max ant brukere\n");}
@@ -115,6 +146,7 @@ int main(){
             }
             case 'L':{
                 printf("Logg inn bruker");
+                
                 break;
             }
             case 'S':{
