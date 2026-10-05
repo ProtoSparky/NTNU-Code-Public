@@ -23,14 +23,15 @@ const int CIPHER = 42; ///< Antall høyre-skift ved kryptering
  * @param passord 
  */
 void encrypt(char* passord){
-    int charLengde = sizeof(passord) / sizeof(passord[0]);
-    char kryptertText[charLengde]; //ferdig kryptert passord
+    int charLengde = strlen(passord);
+    char kryptertText[charLengde + 1];//char for passord kryptering
     for(int i = 0; i < charLengde; i++){
         int ascii = passord[i];
         int verdi = (((ascii - ASCIINRFORST) + CIPHER) % MOD) + ASCIINRFORST;
         kryptertText[i] = (char)verdi;
     }
-    strcpy(passord, kryptertText); 
+    kryptertText[charLengde] = '\0'; //terminerer char så strcpy fungerer ok
+    strcpy(passord, kryptertText);   //skriver over passord med kryptert passord
 }
 
 /**
@@ -41,45 +42,37 @@ void encrypt(char* passord){
  * @return false 
  */
 bool sjekkPassord(char* passord){
-    int storBokstavStart = 65, storBokstavSlutt = 90;
-    int litenBokstavStart = 97, litenBokstavSlutt = 122; 
+    int storBokstavStart = 65, storBokstavSlutt = 90;//range for store bokstaver
+    int litenBokstavStart = 97, litenBokstavSlutt = 122; //samme for små bokstav
+                                //bools som blir sanne om dets krav blir oppnådd
     bool storeBokstaverOK = false, småBokstaverOK = false, alleCharsOK = false; 
-    int antChars = sizeof(passord) / sizeof(passord[0]); 
 
+    int antChars = strlen(passord);
     for(int i = 0; i < antChars; i++){
         //går gjennom alle tegn i passordet
-        int bokstav = passord[i]; 
+        int bokstav = passord[i];           //ascii verdi for en gitt bokstav
 
-        //sjekker etter store bokstaver
+                                            //sjekker etter store bokstaver
         if(
             (bokstav >= ASCIINRFORST && bokstav <= ASCIINRSIST) &&
             (bokstav >= storBokstavStart && bokstav <= storBokstavSlutt)
-        ){
-            storeBokstaverOK = true;
-            //printf("Stor bokstav %c\n", bokstav);
-        }
+        ){storeBokstaverOK = true;}
 
-        //sjekker etter små bokstaver
+                                            //sjekker etter små bokstaver
         if(
             (bokstav >= ASCIINRFORST && bokstav <= ASCIINRSIST) &&
             (bokstav >= litenBokstavStart && bokstav <= litenBokstavSlutt)
-        ){
-            småBokstaverOK = true;
-            //printf("små bokstave %c\n", bokstav); 
-        }
+        ){småBokstaverOK = true;}
 
-        //sjekker etter spesielle chars, ikke bokstaver
+                                //sjekker etter spesielle chars, ikke bokstaver
         if(
             (bokstav >= ASCIINRFORST && bokstav <= ASCIINRSIST) && 
             !(bokstav >= storBokstavStart && bokstav <= storBokstavSlutt) && 
             !(bokstav >= litenBokstavStart && bokstav <= litenBokstavSlutt)
-        ){
-            alleCharsOK = true;
-            //printf("chars funnet %c\n", bokstav); 
-        }
+        ){alleCharsOK = true;}
 
     }
-    return storeBokstaverOK && småBokstaverOK && alleCharsOK; //alle finnes
+    return storeBokstaverOK && småBokstaverOK && alleCharsOK;//alle krav sjekkes 
 }
 
 
@@ -110,12 +103,11 @@ int main(){
         
         switch(menyValg){
             case 'N':{
-                printf("Ny bruker lages\n");
-                
+                printf("\n");                 
                 if(antBrukere < MAXBRUKERE){
                     char inputBrukernavn[STRLEN];
                     char inputPassord[STRLEN];
-
+                                                            //bruker input
                     printf("Skriv inn brukernavn: ");
                     scanf("%s", &inputBrukernavn);
 
@@ -124,13 +116,13 @@ int main(){
                     printf("minst EN liten bokstav, og minst ET spesiell tegn");
                     printf(". Dvs alle valid ascii tegn. \n");
                     printf("passord: ");
-
                     scanf("%s", &inputPassord);
-                    
+
+                                                //sjekker om passordet er valid
                     if(sjekkPassord(inputPassord)){
-                        encrypt(inputPassord); //krypterer passordet
+                        encrypt(inputPassord);  //krypterer passordet
                         
-                        //lagrer brukerdata
+                                                //lagrer brukerdata
                         strcpy(brukerNavn[antBrukere], inputBrukernavn);
                         strcpy(brukerPass[antBrukere], inputPassord);
                         antBrukere ++;
@@ -140,30 +132,23 @@ int main(){
                     }
 
                 }
-                else{printf("Du har oppnådd max ant brukere\n");}
-                
+                else{printf("Du har oppnådd max ant brukere\n");}                
                 break; 
             }
             case 'L':{
                 char inputBrukernavn[STRLEN];
                 char inputPassord[STRLEN];
                 bool funnetBruker = false;
-
-
+                                                            //bruker input
                 printf("\nSkriv inn brukernavn: ");
                 scanf("%s", inputBrukernavn); 
                 printf("\nSkriv inn passord: ");
                 scanf("%s", inputPassord); 
-                printf("'%s'\n",inputPassord);
-                encrypt(inputPassord);
-                for(int i = 0; i < (sizeof(inputPassord)/sizeof(inputPassord[0])); i++){
-                    printf("%d\n", inputPassord[i]);
-                }
+                encrypt(inputPassord);                      //krypterer passord
 
                 //går gjennom alle lagrede brukere og sjekker om
                 //  brukernavn og passord er like
                 for(int i = 0; i < antBrukere; i ++){
-                    printf("brukernavn (%s), passord(%s), inputBrukernavn(%s), inputPassord(%s)\n", brukerNavn[i], brukerPass[i], inputBrukernavn, inputPassord);
                     if(
                         strcmp(brukerNavn[i], inputBrukernavn)== 0 && 
                         strcmp(brukerPass[i], inputPassord)== 0
@@ -171,26 +156,26 @@ int main(){
                 }
                 
                 if(funnetBruker){
-                    printf("Bruker %s er logget inn\n",inputBrukernavn);
+                    printf("Bruker %s er logget inn\n\n",inputBrukernavn);
                 }
                 else{
-                    printf("Brukernavn eller passord er feil\n"); 
+                    printf("Brukernavn eller passord er feil\n\n"); 
                 }
-
 
                 break;
             }
             case 'S':{
+                printf("\n"); 
                 printf("%d / %d registrerte brukere\n", antBrukere, MAXBRUKERE);
                 printf("ID | Brukernavn | Kryptert passord |\n"); 
                 for(int i = 0; i < antBrukere; i++){
                     printf("%d | %s | %s |\n", i+1,brukerNavn[i],brukerPass[i]);
                 }
-                printf("\n");
-
+                printf("\n"); 
                 break;
             }
             case 'Q':{
+                printf("programmet lukkes!\n"); 
                 break;
             }
             default:{
@@ -203,8 +188,6 @@ int main(){
 
     }
     while(menyValg != 'Q');
-
-
     return 0; 
 }
 
