@@ -148,19 +148,25 @@ int main(){
                 char inputBrukernavn[STRLEN];
                 char inputPassord[STRLEN];
                 bool funnetBruker = false;
-                printf("\nSkriv inn brukernavn: ");
-                scanf("%s", &inputBrukernavn); 
 
+
+                printf("\nSkriv inn brukernavn: ");
+                scanf("%s", inputBrukernavn); 
                 printf("\nSkriv inn passord: ");
-                scanf("%s", &inputPassord); 
+                scanf("%s", inputPassord); 
+                printf("'%s'\n",inputPassord);
                 encrypt(inputPassord);
+                for(int i = 0; i < (sizeof(inputPassord)/sizeof(inputPassord[0])); i++){
+                    printf("%d\n", inputPassord[i]);
+                }
 
                 //går gjennom alle lagrede brukere og sjekker om
                 //  brukernavn og passord er like
                 for(int i = 0; i < antBrukere; i ++){
+                    printf("brukernavn (%s), passord(%s), inputBrukernavn(%s), inputPassord(%s)\n", brukerNavn[i], brukerPass[i], inputBrukernavn, inputPassord);
                     if(
-                        strcmp(brukerNavn[i], inputBrukernavn) && 
-                        strcmp(brukerPass[i], inputPassord)
+                        strcmp(brukerNavn[i], inputBrukernavn)== 0 && 
+                        strcmp(brukerPass[i], inputPassord)== 0
                     ){funnetBruker = true;}                    
                 }
                 
