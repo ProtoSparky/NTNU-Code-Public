@@ -1,8 +1,7 @@
 /**
  * @file oblig2.c
  * @author Kristupas Kaupas
- * @brief 
- * @version 0.1
+ * @brief program som krypterer passord for en rekke brukere
  * @date 2026-10-04
  */
 
@@ -20,13 +19,13 @@ const int CIPHER = 42; ///< Antall høyre-skift ved kryptering
 /**
  * @brief krypterer passord med caesar cypher
  * 
- * @param passord 
+ * @param passord char array med passord
  */
 void encrypt(char* passord){
     int charLengde = strlen(passord);
-    char kryptertText[charLengde + 1];//char for passord kryptering
+    char kryptertText[charLengde + 1];  //char for passord kryptering
     for(int i = 0; i < charLengde; i++){
-        int ascii = passord[i];
+        int ascii = passord[i];         // konverterer char til ascii verdi
         int verdi = (((ascii - ASCIINRFORST) + CIPHER) % MOD) + ASCIINRFORST;
         kryptertText[i] = (char)verdi;
     }
@@ -190,4 +189,3 @@ int main(){
     while(menyValg != 'Q');
     return 0; 
 }
-
