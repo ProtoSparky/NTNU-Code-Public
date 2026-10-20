@@ -284,10 +284,18 @@ function URLSearchParams(string){
 ```
 
 # 12
-im not fully sure what is wanted here. The raw post data would be `product_id=883&qty=2`
+im not fully sure what is wanted here. The raw post data would be `product_id=883&qty=2`, and this is how it would look like when included into the whole request
+```
+POST /checkout.php HTTP/1.1
+Host: shop.com
+Content-Type: application/x-www-form-urlencoded
+Content-Length: 20
+
+product_id=883&qty=2
+```
 
 # 13
-this could be done better so each segment loads one after the other, but this proof of concept code does work as well.
+This code could be done better as im essentially treating it as synchronous even though each request is async, and therefore requires timeouts so things would hopefully happen one after the other, but it should work as a proof of concept. 
 ```
 //this is code for nodejs
 const fileName = "./students.txt";
