@@ -82,3 +82,33 @@ void lesSlag(){
         gSlag[valgtSlag] = lesTall(1, parSlag + 3);
     }
 }
+
+/**
+ * @brief konverterer par vs slag til index for navn
+ * 
+ * @param slag 
+ * @param par 
+ * @return int 
+ */
+int finnUttrykk(const int slag, const int par){
+    int index = ((slag - par) -3) * -1; 
+    if(slag == 1){
+        return 8;
+    }
+    return index; 
+}
+
+/**
+ * @brief Skriver ut total antall par og slag
+ * 
+ */
+void skrivSlag(){
+    int totalPar = 0, totalSlag = 0;
+    for(int hull = 0; hull < ANTHULL; hull ++){
+        totalPar += gPar[hull];
+        totalSlag += gSlag[hull];
+
+    }
+    printf("Par antall: %d. Slag antall: %d.\n", totalPar, totalSlag);
+}
+
