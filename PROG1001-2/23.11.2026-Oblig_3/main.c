@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "LesData.h"
+//#include "LesData.h"
 
 #define ANTHULL 18 ///< Antall hull på golfbanen.
 #define ANTUTTRYKK 9 ///< Antall ulike uttrykk for slagprestasjoner.
@@ -23,8 +23,8 @@ int gSlag[ANTHULL]; ///< Reelt/aktuelt antall slag for hvert hull.
 * Hovedprogram.
 */
 int main(){
-    lesPar();/*
-    lesSlag();
+    lesPar();
+    lesSlag();/*
     skrivSlag();
     skrivPrestasjon();
     printf("Banens par: %i\n", summer(gPar, ANTHULL));
@@ -61,9 +61,24 @@ int lesTall(const int min, const int max){
  * 
  */
 void lesPar(){
+    printf("===============================================================\n");
     printf("Fyll ut antall par for alle %d hull\n", ANTHULL);
     for(int valgtPar = 0; valgtPar < ANTHULL; valgtPar ++){
-        printf("Par %d/%d\n", valgtPar, ANTHULL);
+        printf("Par %d/%d\n", valgtPar +1, ANTHULL);
         gPar[valgtPar] = lesTall(2,MAXSLAG);
+    }
+}
+
+/**
+ * @brief Leser inn antall slag personen gjorde uderveis i spillet
+ * 
+ */
+void lesSlag(){
+    printf("===============================================================\n");
+    printf("Skriv inn antall slag gjort for de %d hullene\n",ANTHULL);
+    for(int valgtSlag = 0; valgtSlag < ANTHULL; valgtSlag ++){
+        printf("Slag %d/%d\n", valgtSlag + 1, ANTHULL); 
+        int parSlag = gPar[valgtSlag];
+        gSlag[valgtSlag] = lesTall(1, parSlag + 3);
     }
 }
