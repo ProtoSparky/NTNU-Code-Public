@@ -24,11 +24,11 @@ int gSlag[ANTHULL]; ///< Reelt/aktuelt antall slag for hvert hull.
 */
 int main(){
     lesPar();
-    lesSlag();/*
+    lesSlag();
     skrivSlag();
     skrivPrestasjon();
     printf("Banens par: %i\n", summer(gPar, ANTHULL));
-    printf("Spillerens total: %i\n", summer(gSlag, ANTHULL));*/
+    printf("Spillerens total: %i\n", summer(gSlag, ANTHULL));
 
     return 0;
 }
@@ -112,3 +112,37 @@ void skrivSlag(){
     printf("Par antall: %d. Slag antall: %d.\n", totalPar, totalSlag);
 }
 
+/**
+ * @brief skriver ut hvor mye man fikk på alle kategorier av skudd. [BROKEN]
+ * 
+ */
+void skrivPrestasjon(){
+    int typUtrykk[ANTUTTRYKK] = {0}; 
+    for(int hull = 0; hull < ANTHULL; hull ++){
+        int spesifikkUtrykk = gSlag[hull];
+        typUtrykk[spesifikkUtrykk] ++; 
+    }
+
+    printf("Spesifikke utrykk\n"); 
+    for(int spesifikkUtrykk = ANTUTTRYKK; spesifikkUtrykk > ANTUTTRYKK; spesifikkUtrykk --){
+        printf("%s | %d \n", uttrykk[spesifikkUtrykk], typUtrykk[spesifikkUtrykk]); 
+        if(spesifikkUtrykk == (ANTUTTRYKK -1) && uttrykk[spesifikkUtrykk] > 0){
+            printf("\a"); //lager ding lyd
+        }
+    }
+}
+
+/**
+ * @brief summerer en liste med tall
+ * 
+ * @param arr 
+ * @param n 
+ * @return int 
+ */
+int summer(const int arr[], const int n){
+    int sum = 0;
+    for(int i = 0; i < n; i ++){
+        sum += arr[i];
+    }
+    return sum;
+}
